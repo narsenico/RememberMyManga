@@ -1,0 +1,40 @@
+<ion-view title="Edit comics release">
+  <ion-content class="has-header">
+  	<h1>{{entry.name}}</h1>
+    <form name="form" novalidate class="validation-form">
+		  <label class="item item-input item-stacked-label">
+		    <span class="input-label">Number *</span>
+		    <input type="number" placeholder="release number" ng-model="release.number" required>
+		  </label>
+		  <label class="item item-input item-stacked-label">
+		    <span class="input-label">Date</span>
+		    <input type="date" ng-model="release.date" required>
+		  </label>
+		  <label class="item item-input item-stacked-label">
+		    <span class="input-label">Price</span>
+		    <input type="number" placeholder="price" ng-model="entry.price">
+		  </label>
+		  <label class="item item-input item-stacked-label">
+		  	<span class="input-label">Reminder</span>
+			  <label class="toggle" style="float: right">
+	   			<input type="checkbox" ng-model="release.reminder" ng-true-value="1">
+	   			<div class="track">
+	     			<div class="handle"></div>
+	   			</div>
+				</label>
+			</label>
+		  <label class="item item-input item-stacked-label">
+		  	<span class="input-label">Purchased</span>
+			  <label class="toggle" style="float: right">
+	   			<input type="checkbox" ng-model="release.purchase" ng-true-value="T">
+	   			<div class="track">
+	     			<div class="handle"></div>
+	   			</div>
+				</label>
+			</label>
+		  <div class="content padding">
+				<button class="button button-block button-positive" ng-click="update(release)" ng-disabled="form.$invalid || !isUnique(release)">SAVE</button>
+			</div>
+    </form>
+  </ion-content>
+</ion-view>

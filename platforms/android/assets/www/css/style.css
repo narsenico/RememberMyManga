@@ -1,0 +1,35 @@
+/* Empty. Add your own CSS if you like */
+.comics-icon {
+	display: block;
+	position: absolute;
+	top: 16px;
+	left: 16px;
+	max-width: 40px;
+	max-height: 40px;
+	width: 100%;
+	text-align: center;
+	line-height: 40px;
+	font-size: 2em;
+	color: #DB4545;
+	border: solid 1px #ddd;
+}
+
+/* TODO: i colori non vanno bene, usare le icone */
+.validation-form input.ng-invalid.ng-dirty {
+	background-color: #FA787E;
+}
+
+.validation-form input.ng-valid.ng-dirty {
+	background-color: #78FA89;
+}
+
+/* Release */
+.release .info {
+	text-align: center;
+	width: 65px;
+}
+
+.release .info>span:first-child {
+	font-size: 2.5em;
+	font-weight: bold;
+}

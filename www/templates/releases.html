@@ -1,0 +1,20 @@
+<ion-view title="{{entry == null ? 'Releases' : entry.name}}">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left"class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header" has-bouncing="true">
+    <ion-list can-swipe="true">
+      <ion-item class="item release" ng-repeat="rel in releases" href="#">
+        <div class="info">
+        	<span>{{rel.number}}</span>
+        	<p>{{rel.date | date : 'dd MMM'}}</p>
+        </div>
+        
+        <ion-option-button class="button button-assertive icon ion-trash-a"
+                           ng-click="removeComicsEntry($index, item)">
+          Del
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
