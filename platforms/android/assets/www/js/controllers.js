@@ -45,10 +45,18 @@ angular.module('starter.controllers', ['starter.services'])
   ComicsReader.read("USER");
   //rendo disponibile l'elenco allo scope
   $scope.comics = ComicsReader.comics;
+  //filtro i fumetti in base a $scope.search
+  $scope.getComics = function() {
+    return $scope.comics.filter(function(item) {
+      return !$scope.search || item.name.toLowerCase().indexOf($scope.search.toLowerCase()) > -1; 
+    });
+  };
+  //pulisco filtro
+  $scope.clearSearch = function() {
+    $scope.search = "";
+  };
   //funzione di rimozione elemento
   $scope.removeComicsEntry = function($index, item) {
-    //$scope.comics.splice($index, 1);
-    //TODO
     ComicsReader.remove(item);
   };
   //apre il template per l'editing

@@ -5,9 +5,21 @@
   <ion-nav-buttons side="right">
     <button class="button button-icon icon ion-plus-circled" ng-click="addComicsEntry()"></button>
   </ion-nav-buttons>
+  <ion-header-bar class="bar-light bar-subheader">
+    <input type="search"
+      placeholder="Filter comics..."
+      ng-model="search"
+      ng-focus="searchFocused = true"
+      ng-blur="searchFocused = false"
+      ng-change="scrollTop()">
+    <button ng-if="search.length"
+      class="button button-icon ion-android-close clear-button"
+      ng-click="clearSearch()">
+    </button>
+  </ion-header-bar>
   <ion-content class="has-header" has-bouncing="true">
     <ion-list can-swipe="true">
-      <ion-item class="item item-avatar" ng-repeat="item in comics" href="#/app/releases/{{item.id}}">
+      <ion-item class="item item-avatar" ng-repeat="item in getComics()" href="#/app/releases/{{item.id}}">
 
         <span class="comics-icon">{{item.name.charAt(0).toUpperCase()}}</span>
 

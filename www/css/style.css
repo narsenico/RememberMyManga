@@ -1,4 +1,20 @@
-/* Empty. Add your own CSS if you like */
+.button.button-icon.clear-button {
+  position: absolute;
+  right: 0;
+  top: 5px;
+  color: #bbb;
+}
+
+/* TODO: i colori non vanno bene, usare le icone */
+.validation-form input.ng-invalid.ng-dirty {
+	background-color: #FA787E;
+}
+
+.validation-form input.ng-valid.ng-dirty {
+	background-color: #78FA89;
+}
+
+/* Comics */
 .comics-icon {
 	display: block;
 	position: absolute;
@@ -12,15 +28,6 @@
 	font-size: 2em;
 	color: #DB4545;
 	border: solid 1px #ddd;
-}
-
-/* TODO: i colori non vanno bene, usare le icone */
-.validation-form input.ng-invalid.ng-dirty {
-	background-color: #FA787E;
-}
-
-.validation-form input.ng-valid.ng-dirty {
-	background-color: #78FA89;
 }
 
 /* Release */
