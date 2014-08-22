@@ -19,26 +19,27 @@
   </ion-header-bar>
   <ion-content class="has-header" has-bouncing="true">
     <ion-list can-swipe="true">
-      <ion-item class="item item-avatar" ng-repeat="item in getComics()" href="#/app/releases/{{item.id}}">
+      <ion-item class="item item-avatar item-comics" ng-repeat="item in getComics() | orderBy:'lastUpdate':true" href="#/app/releases/{{item.id}}">
 
         <span class="comics-icon">{{item.name.charAt(0).toUpperCase()}}</span>
 
         <h4>{{item.publisher}}</h4>
         <h2>{{item.name}}</h2>
-        <p>{{item.series}}</p>
+        <p>{{getComicsInfo(item)}}</p>
+
         <!-- todo usare template -->
-        <span class="badge badge-assertive">{{getBestRelease($index, item).number}}</span>
+        <span class="badge badge-assertive">{{getBestRelease(item).number}}</span>
 
         <ion-option-button class="button button-energized icon ion-plus-round"
-                           ng-click="showAddRelease($index, item)">
+                           ng-click="showAddRelease(item)">
           Add
         </ion-option-button>
         <ion-option-button class="button button-positive icon ion-edit"
-                           ng-click="editComicsEntry($index, item)">
+                           ng-click="editComicsEntry(item)">
           Edit
         </ion-option-button>
         <ion-option-button class="button button-assertive icon ion-trash-a"
-                           ng-click="removeComicsEntry($index, item)">
+                           ng-click="removeComicsEntry(item)">
           Del
         </ion-option-button>
       </ion-item>

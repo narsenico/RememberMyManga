@@ -44,6 +44,8 @@ c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\js\app.js \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\js\controllers.js \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\js\services.js \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\js\underscore-min.js \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\js\underscore.string.min.js \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\lib\ionic \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\lib\ionic\css \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\lib\ionic\fonts \

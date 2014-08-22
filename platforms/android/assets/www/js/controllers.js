@@ -48,31 +48,42 @@ angular.module('starter.controllers', ['starter.services'])
   //filtro i fumetti in base a $scope.search
   $scope.getComics = function() {
     return $scope.comics.filter(function(item) {
-      return !$scope.search || item.name.toLowerCase().indexOf($scope.search.toLowerCase()) > -1; 
+      //tolgo spazi superflui con _.str.clean
+      return !$scope.search ||  _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()); 
     });
   };
   //pulisco filtro
   $scope.clearSearch = function() {
     $scope.search = "";
   };
+  //
+  $scope.getComicsInfo = function(item) {
+    if (_.str.isBlank(item.series))
+      return item.notes;
+    else if (_.str.isBlank(item.notes))
+      return item.series
+    else
+      return item.series + " - " + item.notes;
+  };
   //funzione di rimozione elemento
-  $scope.removeComicsEntry = function($index, item) {
+  $scope.removeComicsEntry = function(item) {
     ComicsReader.remove(item);
+    ComicsReader.save();
   };
   //apre il template per l'editing
   $scope.addComicsEntry = function() {
     $location.path("/app/comics/new").replace();
   };
   //apre il template per l'editing del fumetto
-  $scope.editComicsEntry = function($index, item) {
+  $scope.editComicsEntry = function(item) {
     $location.path("/app/comics/" + item.id).replace();
   };
   //apre te template per l'editing dell'uscita
-  $scope.showAddRelease = function($index, item) {
+  $scope.showAddRelease = function(item) {
     $location.path("/app/release/" + item.id + "/new").replace();
   };
   //ritorna l'uscita più significativa da mostrare nell'item del fumetto
-  $scope.getBestRelease = function($index, item) {
+  $scope.getBestRelease = function(item) {
     return ComicsReader.getBestRelease(item);
   }
 })
@@ -86,6 +97,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.update = function(entry) {
     angular.copy(entry, $scope.master);
     ComicsReader.update($scope.master);
+    ComicsReader.save();
     $ionicNavBarDelegate.back();
   };
   $scope.reset = function() {
@@ -123,6 +135,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.update = function(release) {
     angular.copy(release, $scope.master);
     ComicsReader.updateRelease($scope.entry, $scope.master);
+    ComicsReader.save();
     $ionicNavBarDelegate.back();
   };
   $scope.reset = function() {

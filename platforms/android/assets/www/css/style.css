@@ -5,6 +5,15 @@
   color: #bbb;
 }
 
+.rmm-required:after {
+	content: '*';
+	margin-left: 4px;
+}
+
+.rmm-required-message {
+	color: #FA787E;
+}
+
 /* TODO: i colori non vanno bene, usare le icone */
 .validation-form input.ng-invalid.ng-dirty {
 	background-color: #FA787E;
@@ -15,7 +24,7 @@
 }
 
 /* Comics */
-.comics-icon {
+.item-comics .comics-icon {
 	display: block;
 	position: absolute;
 	top: 16px;
@@ -28,6 +37,10 @@
 	font-size: 2em;
 	color: #DB4545;
 	border: solid 1px #ddd;
+}
+
+.item-comics p {
+	margin-bottom: 0;
 }
 
 /* Release */
