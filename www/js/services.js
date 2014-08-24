@@ -179,4 +179,30 @@ angular.module('starter.services', [])
 	};
 
   return DB;
+})
+
+.factory('Settings', function () {
+
+	var def = {
+		comicsCompactMode: false
+	};
+
+	//localstorage DB
+	var DB = {
+		//
+		userOptions: def,
+		//
+		load: function() {
+			var str = window.localStorage.getItem("OPTIONS");
+			if (str) {
+				angular.extend(this.userOptions, JSON.parse(str));
+			}
+		},
+		//
+		save: function() {
+			window.localStorage.setItem("OPTIONS", JSON.stringify(this.userOptions))
+		}
+	};
+
+	return DB;
 });

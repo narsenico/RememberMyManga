@@ -1,6 +1,6 @@
 <ion-view title="{{entry.id == 'new' ? 'New comics entry': 'Edit comics entry'}}">
   <ion-nav-buttons side="right">
-    <button class="button button-icon icon ion-ios7-download-outline" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)"></button>
+    <button class="button button-icon icon ion-android-checkmark" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)"></button>
   </ion-nav-buttons>
   <ion-content class="has-header">
     <form name="form" novalidate class="validation-form">

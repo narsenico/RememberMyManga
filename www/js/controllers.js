@@ -1,7 +1,8 @@
 angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, Settings) {
   //
+  Settings.load();
 })
 
 .directive('buttonHref', function($location) {
@@ -185,7 +186,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.reset();
 })
 
-.controller('OptionsCtrl', function($scope, $ionicPopup, ComicsReader) {
+.controller('OptionsCtrl', function($scope, $ionicPopup, ComicsReader, Settings) {
   //
   $scope.version = "?";
   //
@@ -195,6 +196,11 @@ angular.module('starter.controllers', ['starter.services'])
     });
   } else {
     $scope.version = "unknown";
+  }
+  //
+  $scope.userOptions = Settings.userOptions;
+  $scope.optionsChanged = function() {
+    Settings.save();    
   }
   //
   $scope.deleteAllData = function() {

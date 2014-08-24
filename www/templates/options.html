@@ -3,9 +3,23 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-content class="has-header">
-  	<ion-list>
-  		<ion-item class="item option-info">Version: {{version}}</ion-item>
-  		<ion-item class="item" ng-click="deleteAllData()"><i class="icon ion-trash-a"></i> Delete all data</ion-item>
-  	</ion-list>
+  	<form name="myForm">
+	  	<ion-list>
+	  		<ion-item class="item option-info">Version: {{version}}</ion-item>
+	  		<ion-item class="item" ng-click="deleteAllData()"><i class="icon ion-trash-a"></i> Delete all data</ion-item>
+	  		<ion-item class="item" ng-click=""><i class="icon ion-ios7-download"></i> Export</ion-item>
+	  		<ion-item class="item" ng-click=""><i class="icon ion-ios7-upload"></i> Import</ion-item>
+			  <div class="item item-divider">Comics options</div>
+			  <ion-item class="item item-toggle">
+					Enable compact mode
+					<label class="toggle">
+						<input type="checkbox" ng-model="userOptions.comicsCompactMode" ng-true-value="true" ng-false-value="false" ng-change="optionsChanged()">
+						<div class="track">
+						<div class="handle"></div>
+						</div>
+					</label>
+				</ion-item>
+	  	</ion-list>
+  	</form>
   </ion-content>
 </ion-view>
