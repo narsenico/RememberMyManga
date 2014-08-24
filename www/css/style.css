@@ -14,6 +14,10 @@
 	color: #FA787E;
 }
 
+.option-info {
+	background-color: #ddd;
+}
+
 /* TODO: i colori non vanno bene, usare le icone */
 .validation-form input.ng-invalid.ng-dirty {
 	background-color: #FA787E;
@@ -24,6 +28,32 @@
 }
 
 /* Comics */
+.item-comics .item-content {
+	min-height: 94px;
+}
+
+.item-comics .comics-title {
+	display: block;
+	font-size: 1.3em;
+	font-weight: bold;
+	color: #444;
+	margin-bottom: 2px;
+}
+
+.item-comics .comics-subtitle {
+	display: block;
+	font-size: 0.7em;
+	font-weight: bold;
+	color: #444;
+}
+
+.item-comics .comics-notes {
+	display: block;
+	font-size: 0.7em;
+	font-weight: normal;
+	color: #B7B7B7;
+}
+
 .item-comics .comics-icon {
 	display: block;
 	position: absolute;
@@ -41,6 +71,43 @@
 
 .item-comics p {
 	margin-bottom: 0;
+}
+
+.best-release {
+	position: absolute;
+	right: 6px;
+	top: 10px;
+	bottom: 10px;
+	min-width: 80px;
+	border: solid 1px #66CC33;
+	border-radius: 4px;
+	color: #444;
+}
+
+.best-release:after {
+	position: absolute;
+	top: 10px;
+	left: -10px;
+	width: 0;
+	height: 0; 
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent; 	
+	border-right: 10px solid #66CC33;
+	content: '';
+}
+
+.best-release .number {
+	font-size: 2.0em;
+	text-align: center;
+	line-height: 40px;
+	background-color: #66CC33;
+}
+
+.best-release .date {
+	font-size: 0.9em;
+	text-align: center;
+	line-height: 34px;
+	border-top: solid 1px #ddd;
 }
 
 /* Release */

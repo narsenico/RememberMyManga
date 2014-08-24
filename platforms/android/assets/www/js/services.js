@@ -68,7 +68,7 @@ function ComicsRelease(opts) {
 }
 
 ComicsRelease.new = function(comicsId) {
-	return new ComicsEntry( { comicsId: comicsId } );
+	return new ComicsRelease( { comicsId: comicsId } );
 }
 
 //TODO rivedere l'inglese
@@ -125,7 +125,8 @@ angular.module('starter.services', [])
 	  	if (id == "new") {
 	  		return ComicsRelease.new(item.id);
 	  	} else {
-	  		return _.findWhere(item.releases, { number: id }) || ComicsRelease.new(item.id);
+	  		console.log("getReleaseById", item.releases, id, _.findWhere(item.releases, { number: id }))
+	  		return _.findWhere(item.releases, { number: parseInt(id) }) || ComicsRelease.new(item.id);
 		  }
 		},
 		//
@@ -134,6 +135,15 @@ angular.module('starter.services', [])
 			var idx = item.releases.indexByKey(release.number, 'number');
 			if (idx == -1) {
 				item.releases.push(release);
+			}
+			//aggiorno ultima modifica
+			item.lastUpdate = new Date();
+		},
+		//
+		removeRelease: function(item, release) {
+			var idx = item.releases.indexByKey(release.number, 'number');
+			if (idx > -1) {
+				item.releases.splice(idx, 1);
 			}
 			//aggiorno ultima modifica
 			item.lastUpdate = new Date();
@@ -161,6 +171,10 @@ angular.module('starter.services', [])
 			var idx = this.comics.indexByKey(item.id, 'id');
 			if (idx > -1)
 				this.comics.splice(idx, 1);
+		},
+		//
+		clear: function() {
+			this.comics = [];
 		}
 	};
 

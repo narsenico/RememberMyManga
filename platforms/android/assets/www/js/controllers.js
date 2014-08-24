@@ -1,43 +1,19 @@
 angular.module('starter.controllers', ['starter.services'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+  //
+})
 
-  // // Form data for the login modal
-  // $scope.loginData = {};
-
-  // // Create the login modal that we will use later
-  // $ionicModal.fromTemplateUrl('templates/login.html', {
-  //   scope: $scope
-  // }).then(function(modal) {
-  //   $scope.modal = modal;
-  // });
-
-  // // Triggered in the login modal to close it
-  // $scope.closeLogin = function() {
-  //   $scope.modal.hide();
-  // };
-
-  // // Open the login modal
-  // $scope.login = function() {
-  //   $scope.modal.show();
-  // };
-
-  // // Perform the login action when the user submits the login form
-  // $scope.doLogin = function() {
-  //   console.log('Doing login', $scope.loginData);
-
-  //   // Simulate a login delay. Remove this and replace with your login
-  //   // code if using a login system
-  //   $timeout(function() {
-  //     $scope.closeLogin();
-  //   }, 1000);
-  // };
-
-  // TODO Exit
-  $scope.exit = function() {
-    //
+.directive('buttonHref', function($location) {
+  return {
+    restrict: 'A',
+    link: function(scope, elem, attr) {
+      elem.bind('click', function() {
+        $location.path(attr.buttonHref).replace();
+        scope.$apply();
+      });
+    }
   };
-
 })
 
 .controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, ComicsReader) {
@@ -85,7 +61,26 @@ angular.module('starter.controllers', ['starter.services'])
   //ritorna l'uscita più significativa da mostrare nell'item del fumetto
   $scope.getBestRelease = function(item) {
     return ComicsReader.getBestRelease(item);
-  }
+  };
+  //
+  $scope.isMultiSelectionMode = false;
+  //
+  $scope.toggleMultiSelectionMode = function() {
+    $scope.isMultiSelectionMode = !$scope.isMultiSelectionMode;
+    //TODO attiva la multi selezione, tap su item seleziona, pulsanti nel footer (cancella tutti, etc)
+  };
+})
+.directive('bestRelease', function() {
+  return {
+    restrict: 'E',
+    scope: {
+      comics: '='
+    },
+    controller: function($scope, ComicsReader) {
+      $scope.best = ComicsReader.getBestRelease($scope.comics);
+    },
+    templateUrl: 'templates/bestRelease.html'
+  };
 })
 
 .controller('ComicsEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, ComicsReader) {
@@ -104,15 +99,55 @@ angular.module('starter.controllers', ['starter.services'])
     $scope.entry = angular.copy($scope.master);
   };
   $scope.isUnique = function(entry) {
-    //TODO verifica se il nome sia unico?
+    //verifica se il nome sia unico?
+    //return !_.findWhere(ComicsReader.comics, { name: entry.name });
     return true;
   };
   $scope.reset();
 })
+//TODO uso una direttiva per la validazione
+.directive('comicsUnique', function() {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function(scope, elem, attr, ngModel) {
 
-.controller('ReleasesEntryCtrl', function($scope, $stateParams, ComicsReader) {
+      function isUnique(value) {
+        //angular.forEach
+
+        //posso accedere al master e controllare l'id, se !new e == id master è ok 
+        // console.log(scope.master)
+
+        return true;        
+      }
+
+      ngModel.$parsers.unshift(function(value) {
+        ngModel.$setValidity('unique', isUnique(value));
+        return value;
+      });
+
+      ngModel.$formatters.unshift(function(value) {
+          ngModel.$setValidity('unique', isUnique(value));
+          return value;
+      });
+
+    }
+  };
+})
+
+.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, ComicsReader) {
   $scope.entry = null;
   $scope.releases = [];
+
+  //apre te template per l'editing dell'uscita
+  $scope.showAddRelease = function(item) {
+    $location.path("/app/release/" + item.id + "/new").replace();
+  };
+  //
+  $scope.removeRelease = function(item, release) {
+    ComicsReader.removeRelease(item, release);
+    ComicsReader.save();
+  };
 
   if ($stateParams.comicsId == null) {
     //TODO uscite di tutti i fumetti
@@ -130,7 +165,7 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('ReleaseEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, ComicsReader) {
   $scope.entry = ComicsReader.getComicsById($stateParams.comicsId);
   //originale
-  $scope.master = ComicsReader.getReleaseById($scope.entry, $stateParams.comicsId);
+  $scope.master = ComicsReader.getReleaseById($scope.entry, $stateParams.releaseId);
   //aggiorno l'originale e torno indietro
   $scope.update = function(release) {
     angular.copy(release, $scope.master);
@@ -143,9 +178,35 @@ angular.module('starter.controllers', ['starter.services'])
   };
   $scope.isUnique = function(release) {
     //TODO verifica che il numero sia unico per il fumetto
+    // console.log("isUnique", release);
+    // return release.number == "new" || !_.findWhere($scope.entry.releases, { number: release.number });
     return true;
   };
   $scope.reset();
 })
 
+.controller('OptionsCtrl', function($scope, $ionicPopup, ComicsReader) {
+  //
+  $scope.version = "?";
+  //
+  if (window.cordova) {
+    window.cordova.getAppVersion(function (version) {
+      $scope.version = version;
+    });
+  } else {
+    $scope.version = "unknown";
+  }
+  //
+  $scope.deleteAllData = function() {
+    $ionicPopup.confirm({
+      title: 'Confirm',
+      template: 'Delete all data?'
+    }).then(function(res) {
+      if (res) {
+        ComicsReader.clear();
+        ComicsReader.save();
+      }
+    });
+  };
+})
 ;

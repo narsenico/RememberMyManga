@@ -10,4 +10,5 @@ c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-bu
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\it\amonshore\rmm\R.class \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\it\amonshore\rmm\RememberMyManga.class \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\org\apache\cordova\device\Device.class \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\uk\co\whiteoctober\cordova\AppVersion.class \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\dexedLibs\classes-7d37a51ace12b4b98e30ad93cfae16e1.jar \

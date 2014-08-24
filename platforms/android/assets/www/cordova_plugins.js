@@ -13,6 +13,13 @@ module.exports = [
         "clobbers": [
             "device"
         ]
+    },
+    {
+        "file": "plugins/uk.co.whiteoctober.cordova.appversion/www/AppVersionPlugin.js",
+        "id": "uk.co.whiteoctober.cordova.appversion.AppVersionPlugin",
+        "clobbers": [
+            "cordova.getAppVersion"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -20,7 +27,8 @@ module.exports.metadata =
 {
     "com.ionic.keyboard": "1.0.2",
     "org.apache.cordova.console": "0.2.10",
-    "org.apache.cordova.device": "0.2.11"
+    "org.apache.cordova.device": "0.2.11",
+    "uk.co.whiteoctober.cordova.appversion": "0.1.4"
 }
 // BOTTOM OF METADATA
 });

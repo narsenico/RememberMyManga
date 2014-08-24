@@ -1,4 +1,7 @@
 <ion-view title="Edit comics release">
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon ion-ios7-download-outline" ng-click="update(release)" ng-disabled="form.$invalid || !isUnique(release)"></button>
+  </ion-nav-buttons>
   <ion-content class="has-header">
   	<h1>{{entry.name}}</h1>
     <form name="form" novalidate class="validation-form">
@@ -13,7 +16,7 @@
 		  </label>
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label">Price</span>
-		    <input type="number" placeholder="price" ng-model="entry.price">
+		    <input type="number" placeholder="price" ng-model="release.price">
 		  </label>
 		  <label class="item item-input item-stacked-label">
 		  	<span class="input-label">Reminder</span>
@@ -33,9 +36,9 @@
 	   			</div>
 				</label>
 			</label>
-		  <div class="content padding">
+		  <!-- <div class="content padding">
 				<button class="button button-block button-positive" ng-click="update(release)" ng-disabled="form.$invalid || !isUnique(release)">SAVE</button>
-			</div>
+			</div> -->
     </form>
   </ion-content>
 </ion-view>

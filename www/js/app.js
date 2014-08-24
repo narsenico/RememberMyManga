@@ -75,6 +75,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngAnimate'])
           controller: 'ComicsEditorCtrl'
         }
       }
+    })
+
+    .state('app.options', {
+      url: "/options",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/options.html",
+          controller: 'OptionsCtrl'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/comics');

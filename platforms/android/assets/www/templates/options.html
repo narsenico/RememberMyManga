@@ -1,0 +1,11 @@
+<ion-view title="Options">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+  	<ion-list>
+  		<ion-item class="item option-info">Version: {{version}}</ion-item>
+  		<ion-item class="item" ng-click="deleteAllData()"><i class="icon ion-trash-a"></i> Delete all data</ion-item>
+  	</ion-list>
+  </ion-content>
+</ion-view>

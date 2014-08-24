@@ -17,18 +17,19 @@
       ng-click="clearSearch()">
     </button>
   </ion-header-bar>
-  <ion-content class="has-header" has-bouncing="true">
+  <ion-content class="has-header has-footer" has-bouncing="true">
     <ion-list can-swipe="true">
-      <ion-item class="item item-avatar item-comics" ng-repeat="item in getComics() | orderBy:'lastUpdate':true" href="#/app/releases/{{item.id}}">
+      <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" ng-repeat="item in getComics() | orderBy:'lastUpdate':true" href="#/app/releases/{{item.id}}">
 
-        <span class="comics-icon">{{item.name.charAt(0).toUpperCase()}}</span>
+        <!-- <span class="comics-icon">{{item.name.charAt(0).toUpperCase()}}</span> -->
 
-        <h4>{{item.publisher}}</h4>
-        <h2>{{item.name}}</h2>
-        <p>{{getComicsInfo(item)}}</p>
+        <span class="comics-title">{{item.name}}</span>
+        <span class="comics-subtitle">{{item.publisher}}</span>
+        <span class="comics-notes">{{getComicsInfo(item)}}</span>
 
         <!-- todo usare template -->
-        <span class="badge badge-assertive">{{getBestRelease(item).number}}</span>
+        <!-- <span class="badge badge-assertive">{{getBestRelease(item).number}}</span> -->
+        <best-release comics="item"></best-release>
 
         <ion-option-button class="button button-energized icon ion-plus-round"
                            ng-click="showAddRelease(item)">
@@ -45,4 +46,7 @@
       </ion-item>
     </ion-list>
   </ion-content>
+  <div class="bar bar-footer bar-balanced" ng-show="isMultiSelectionMode">
+    <div class="title">Footer</div>
+  </div>
 </ion-view>

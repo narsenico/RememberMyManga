@@ -1,9 +1,12 @@
 <ion-view title="{{entry.id == 'new' ? 'New comics entry': 'Edit comics entry'}}">
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon ion-ios7-download-outline" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)"></button>
+  </ion-nav-buttons>
   <ion-content class="has-header">
     <form name="form" novalidate class="validation-form">
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label rmm-required">Title</span>
-		    <input type="text" placeholder="comics title" ng-model="entry.name" required>
+		    <input type="text" placeholder="comics title" ng-model="entry.name" comics-unique required>
 		  </label>
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label">Series</span>
@@ -38,11 +41,11 @@
 			</label>
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label">Notes</span>
-		    <textarea placeholder="notes" rows="4" ng-model="entry.notes"></textarea>
+		    <input type="text" placeholder="notes" ng-model="entry.notes">
 		  </label>
-		  <div class="content padding">
+		  <!-- <div class="content padding">
 				<button class="button button-block button-positive" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)">SAVE</button>
-			</div>
+			</div> -->
     </form>
   </ion-content>
 </ion-view>
