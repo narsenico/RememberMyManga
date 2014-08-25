@@ -20,6 +20,13 @@ module.exports = [
         "clobbers": [
             "cordova.getAppVersion"
         ]
+    },
+    {
+        "file": "plugins/de.appplant.cordova.plugin.local-notification/www/local-notification.js",
+        "id": "de.appplant.cordova.plugin.local-notification.LocalNotification",
+        "clobbers": [
+            "plugin.notification.local"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -28,7 +35,8 @@ module.exports.metadata =
     "com.ionic.keyboard": "1.0.2",
     "org.apache.cordova.console": "0.2.10",
     "org.apache.cordova.device": "0.2.11",
-    "uk.co.whiteoctober.cordova.appversion": "0.1.4"
+    "uk.co.whiteoctober.cordova.appversion": "0.1.4",
+    "de.appplant.cordova.plugin.local-notification": "0.8.0dev"
 }
 // BOTTOM OF METADATA
 });

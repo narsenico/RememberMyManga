@@ -2,6 +2,15 @@ c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-bu
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\com\ionic\keyboard\IonicKeyboard$1.class \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\com\ionic\keyboard\IonicKeyboard$2.class \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\com\ionic\keyboard\IonicKeyboard.class \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\de\appplant\cordova\plugin\localnotification\LocalNotification$1.class \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\de\appplant\cordova\plugin\localnotification\LocalNotification$2.class \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\de\appplant\cordova\plugin\localnotification\LocalNotification$3.class \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\de\appplant\cordova\plugin\localnotification\LocalNotification$4.class \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\de\appplant\cordova\plugin\localnotification\LocalNotification.class \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\de\appplant\cordova\plugin\localnotification\Options.class \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\de\appplant\cordova\plugin\localnotification\Receiver.class \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\de\appplant\cordova\plugin\localnotification\ReceiverActivity.class \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\de\appplant\cordova\plugin\localnotification\Restore.class \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\it\amonshore\rmm\BuildConfig.class \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\it\amonshore\rmm\R$attr.class \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\it\amonshore\rmm\R$drawable.class \
@@ -12,3 +21,4 @@ c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-bu
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\org\apache\cordova\device\Device.class \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes\uk\co\whiteoctober\cordova\AppVersion.class \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\dexedLibs\classes-7d37a51ace12b4b98e30ad93cfae16e1.jar \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\dexedLibs\android-support-v4-8a988afbb8a6ee3df33d9a01ca5224d0.jar \

@@ -2,3 +2,4 @@ c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-bu
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\RememberMyManga.ap_ \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\ant-build\classes.dex \
 C:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\CordovaLib\ant-build\classes.jar \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\libs\android-support-v4.jar \

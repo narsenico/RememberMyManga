@@ -28,14 +28,18 @@ function ComicsEntry(opts) {
 	this.reserved = "F";
 	this.notes = null;
 	this.releases = [];
-	this.lastUpdate = new Date();
+	this.lastUpdate = new Date().getTime();
 
 	if (opts && !opts.id && opts.name) {
 		opts.id = opts.name.hashCode().toString();
 	}
 
 	angular.extend(this, opts);
-}	
+}
+
+ComicsEntry.prototype.updated = function() {
+	this.lastUpdate = new Date().getTime();
+}
 
 ComicsEntry.prototype.indexOfRelease = function(number) {
 	for (var ii=0; ii<this.releases.length; ii++) {
@@ -93,6 +97,7 @@ angular.module('starter.services', [])
 		comics: null,
 		//
 		read: function(uid, refresh) {
+			//console.log(uid, refresh);
 			if (this.comics == null || refresh) {
 				var dbkey = uid + "_comics";
 				this.uid = uid;
@@ -137,7 +142,7 @@ angular.module('starter.services', [])
 				item.releases.push(release);
 			}
 			//aggiorno ultima modifica
-			item.lastUpdate = new Date();
+			item.updated();
 		},
 		//
 		removeRelease: function(item, release) {
@@ -146,7 +151,7 @@ angular.module('starter.services', [])
 				item.releases.splice(idx, 1);
 			}
 			//aggiorno ultima modifica
-			item.lastUpdate = new Date();
+			item.updated();
 		},
 		//
 		getBestRelease: function(item) {
@@ -163,7 +168,7 @@ angular.module('starter.services', [])
 				this.comics.push(item);
 			}
 			//aggiorno ultima modifica
-			item.lastUpdate = new Date();
+			item.updated();
 		},
 		//
 		remove: function(item) {
@@ -175,6 +180,18 @@ angular.module('starter.services', [])
 		//
 		clear: function() {
 			this.comics = [];
+		},
+		//
+		repairData: function() {
+			if (this.comics) {
+				for (var ii=0; ii<this.comics.length; ii++) {
+					this.comics[ii].updated();
+
+					angular.forEach(
+						_.filter(_.keys(this.comics[ii]), function(v) { return _.str.startsWith(v, '$$') }), 
+						function(key) { delete this.comics[ii][key]; }, this)
+				}
+			}
 		}
 	};
 
@@ -184,19 +201,23 @@ angular.module('starter.services', [])
 .factory('Settings', function () {
 
 	var def = {
+		debugMode: false,
 		comicsCompactMode: false
 	};
 
 	//localstorage DB
 	var DB = {
 		//
-		userOptions: def,
+		userOptions: angular.copy(def),
 		//
 		load: function() {
 			var str = window.localStorage.getItem("OPTIONS");
 			if (str) {
 				angular.extend(this.userOptions, JSON.parse(str));
 			}
+		},
+		loadDefault: function() {
+			this.userOptions = def;
 		},
 		//
 		save: function() {

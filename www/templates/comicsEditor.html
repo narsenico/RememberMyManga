@@ -1,36 +1,37 @@
 <ion-view title="{{entry.id == 'new' ? 'New comics entry': 'Edit comics entry'}}">
   <ion-nav-buttons side="right">
+    <!-- <button class="button button-icon icon ion-android-close" ng-click="cancel()"></button> -->
     <button class="button button-icon icon ion-android-checkmark" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)"></button>
   </ion-nav-buttons>
   <ion-content class="has-header">
     <form name="form" novalidate class="validation-form">
-		  <label class="item item-input item-stacked-label">
-		    <span class="input-label rmm-required">Title</span>
-		    <input type="text" placeholder="comics title" ng-model="entry.name" comics-unique required>
+		  <label class="item item-input item-key">
+		  	<span class="input-label rmm-required">Name</span>
+		    <input type="text" placeholder="comics title" ng-model="entry.name" required>
 		  </label>
-		  <label class="item item-input item-stacked-label">
+		  <label class="item item-input">
 		    <span class="input-label">Series</span>
 		    <input type="text" placeholder="comics series" ng-model="entry.series">
 		  </label>
-		  <label class="item item-input item-stacked-label">
+		  <label class="item item-input">
 		    <span class="input-label">Publisher</span>
 		    <input type="text" placeholder="publisher" ng-model="entry.publisher">
 		  </label>
-		  <label class="item item-input item-stacked-label">
+		  <label class="item item-input">
 		    <span class="input-label">Authors</span>
 		    <input type="text" placeholder="authors" ng-model="entry.authors">
 		  </label>
-		  <label class="item item-input item-stacked-label">
+		  <label class="item item-input">
 		    <span class="input-label">Price</span>
-		    <input type="number" placeholder="price" ng-model="entry.price">
+		    <input type="number" placeholder="price" ng-model="entry.price" onfocus="this.select()">
 		  </label>
-		  <label class="item item-input item-stacked-label item-select">
+		  <label class="item item-input item-select">
 		    <span class="input-label">Periodicity</span>
 		    <select ng-model="entry.periodicity" ng-options="k as v for (k, v) in periodicities">
       		<option value=""></option>
       	</select>
 		  </label>
-		  <label class="item item-input item-stacked-label">
+		  <label class="item item-input">
 		  	<span class="input-label">Reserved</span>
 			  <label class="toggle" style="float: right">
 	   			<input type="checkbox" ng-model="entry.reserved" ng-true-value="T">
@@ -43,9 +44,10 @@
 		    <span class="input-label">Notes</span>
 		    <input type="text" placeholder="notes" ng-model="entry.notes">
 		  </label>
-		  <!-- <div class="content padding">
-				<button class="button button-block button-positive" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)">SAVE</button>
-			</div> -->
+		  <div class="content padding">
+		  	&nbsp;
+				<!-- <button class="button button-block button-positive" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)">SAVE</button> -->
+			</div>
     </form>
   </ion-content>
 </ion-view>

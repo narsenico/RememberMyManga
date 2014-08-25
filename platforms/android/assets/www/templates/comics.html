@@ -3,21 +3,19 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
-    <button class="button button-icon icon ion-plus-circled" ng-click="addComicsEntry()"></button>
+    <button class="button button-icon icon ion-plus-round" ng-click="addComicsEntry()"></button>
   </ion-nav-buttons>
-  <ion-header-bar class="bar-light bar-subheader">
-    <input type="search"
-      placeholder="Filter comics..."
-      ng-model="search"
-      ng-focus="searchFocused = true"
-      ng-blur="searchFocused = false"
-      ng-change="scrollTop()">
+  <ion-header-bar class="bar bar-subheader item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios7-search placeholder-icon"></i>
+      <input type="search" placeholder="Filter comics..." ng-model="search" ng-change="scrollTop()">
+    </label>
     <button ng-if="search.length"
       class="button button-icon ion-android-close clear-button"
       ng-click="clearSearch()">
     </button>
   </ion-header-bar>
-  <ion-content class="has-header has-footer" has-bouncing="true">
+  <ion-content class="has-header" has-bouncing="true">
     <ion-list can-swipe="true">
       <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" ng-repeat="item in getComics() | orderBy:'lastUpdate':true" href="#/app/releases/{{item.id}}">
 
@@ -26,6 +24,7 @@
         <span class="comics-title">{{item.name}}</span>
         <span class="comics-subtitle">{{item.publisher}}</span>
         <span class="comics-notes">{{getComicsInfo(item)}}</span>
+        <span class="comics-notes" ng-show="debugMode">{{item.lastUpdate}}</span>
 
         <!-- todo usare template -->
         <!-- <span class="badge badge-assertive">{{getBestRelease(item).number}}</span> -->
@@ -46,7 +45,9 @@
       </ion-item>
     </ion-list>
   </ion-content>
-  <div class="bar bar-footer bar-balanced" ng-show="isMultiSelectionMode">
+  <!-- TODO non va bene, footer occupa cmq spazio anche se non visibile -->
+  <!-- il problema è la class has-footer di ion-content: tramite direttiva a ion-content si potrebbe gestire la classe (toggle) -->
+  <!-- <div class="bar bar-footer bar-balanced" ng-show="isMultiSelectionMode">
     <div class="title">Footer</div>
-  </div>
+  </div> -->
 </ion-view>

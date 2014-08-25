@@ -1,8 +1,10 @@
 angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, Settings) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, Settings, ComicsReader) {
   //
   Settings.load();
+  //leggo l'elenco dei fumetti (per utente USER)
+  ComicsReader.read("USER");
 })
 
 .directive('buttonHref', function($location) {
@@ -17,9 +19,8 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, ComicsReader) {
-  //leggo l'elenco dei fumetti (per utente USER)
-  ComicsReader.read("USER");
+.controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, ComicsReader, Settings) {
+  $scope.debugMode = Settings.userOptions.debugMode;
   //rendo disponibile l'elenco allo scope
   $scope.comics = ComicsReader.comics;
   //filtro i fumetti in base a $scope.search
@@ -99,6 +100,9 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.reset = function() {
     $scope.entry = angular.copy($scope.master);
   };
+  $scope.cancel = function() {
+    $ionicNavBarDelegate.back();
+  };
   $scope.isUnique = function(entry) {
     //verifica se il nome sia unico?
     //return !_.findWhere(ComicsReader.comics, { name: entry.name });
@@ -177,6 +181,9 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.reset = function() {
     $scope.release = angular.copy($scope.master);
   };
+  $scope.cancel = function() {
+    $ionicNavBarDelegate.back();
+  };
   $scope.isUnique = function(release) {
     //TODO verifica che il numero sia unico per il fumetto
     // console.log("isUnique", release);
@@ -201,7 +208,20 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.userOptions = Settings.userOptions;
   $scope.optionsChanged = function() {
     Settings.save();    
-  }
+  };
+  //
+  $scope.resetOptions = function() {
+    $ionicPopup.confirm({
+      title: 'Confirm',
+      template: 'Reset to default options?'
+    }).then(function(res) {
+      if (res) {
+        Settings.loadDefault();
+        Settings.save();
+        $scope.userOptions = Settings.userOptions;
+      }
+    });
+  };
   //
   $scope.deleteAllData = function() {
     $ionicPopup.confirm({
@@ -212,6 +232,23 @@ angular.module('starter.controllers', ['starter.services'])
         ComicsReader.clear();
         ComicsReader.save();
       }
+    });
+  };
+  //
+  $scope.repairData = function() {
+    ComicsReader.repairData();
+    ComicsReader.save();
+    ComicsReader.read(ComicsReader.uid, true);
+  };
+  //
+  $scope.test = function() {
+    // window.plugin.notification.local.add(
+    //   { id: 't001', message: 'test message', title: 'test title' }
+    // , function() { console.log("add ", arguments) } );
+
+    $ionicPopup.alert({
+      title: 'Test',
+      template: window.localStorage.getItem('USER_comics')
     });
   };
 })

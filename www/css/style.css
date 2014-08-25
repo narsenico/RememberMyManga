@@ -18,13 +18,17 @@
 	color: #ddd;
 }
 
+.item-key {
+	background-color: #F0E3C2;
+}
+
 /* TODO: i colori non vanno bene, usare le icone */
 .validation-form input.ng-invalid.ng-dirty {
-	background-color: #FA787E;
+	/*background-color: #FA787E;*/
 }
 
 .validation-form input.ng-valid.ng-dirty {
-	background-color: #78FA89;
+	/*background-color: #78FA89;*/
 }
 
 /* Comics */

@@ -1,24 +1,27 @@
 <ion-view title="Edit comics release">
   <ion-nav-buttons side="right">
+  	<!-- <button class="button button-icon icon ion-android-close" ng-click="cancel()"></button> -->
     <button class="button button-icon icon ion-android-checkmark" ng-click="update(release)" ng-disabled="form.$invalid || !isUnique(release)"></button>
   </ion-nav-buttons>
+  <ion-header-bar class="bar-subheader">
+  	<h1 class="title">{{entry.name}}</h1>
+	</ion-header-bar>
   <ion-content class="has-header">
-  	<h1>{{entry.name}}</h1>
     <form name="form" novalidate class="validation-form">
-		  <label class="item item-input item-stacked-label">
+		  <label class="item item-input item-key">
 		    <span class="input-label rmm-required">Number</span>
 		    <input type="number" placeholder="release number" ng-model="release.number" required>
 		  </label>
-		  <label class="item item-input item-stacked-label">
+		  <label class="item item-input">
 		    <span class="input-label">Date</span>
 		    <input type="date" name="rdate" ng-model="release.date" ng-required="release.reminder=='1'">
 		    <span class="rmm-required-message" ng-show="form.rdate.$error.required">Release date is required with reminder checked!</span>
 		  </label>
-		  <label class="item item-input item-stacked-label">
+		  <label class="item item-input">
 		    <span class="input-label">Price</span>
 		    <input type="number" placeholder="price" ng-model="release.price">
 		  </label>
-		  <label class="item item-input item-stacked-label">
+		  <label class="item item-input">
 		  	<span class="input-label">Reminder</span>
 			  <label class="toggle" style="float: right">
 	   			<input type="checkbox" ng-model="release.reminder" ng-true-value="1">
@@ -27,7 +30,7 @@
 	   			</div>
 				</label>
 			</label>
-		  <label class="item item-input item-stacked-label">
+		  <label class="item item-input">
 		  	<span class="input-label">Purchased</span>
 			  <label class="toggle" style="float: right">
 	   			<input type="checkbox" ng-model="release.purchase" ng-true-value="T">

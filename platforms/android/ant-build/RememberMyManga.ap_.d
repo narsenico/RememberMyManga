@@ -116,10 +116,13 @@ c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\lib\ionic\scss\ionicons\_ionicons-icons.scss \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\lib\ionic\scss\ionicons\_ionicons-variables.scss \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\com.ionic.keyboard \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\de.appplant.cordova.plugin.local-notification \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\org.apache.cordova.device \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\uk.co.whiteoctober.cordova.appversion \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\com.ionic.keyboard\www \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\com.ionic.keyboard\www\keyboard.js \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\de.appplant.cordova.plugin.local-notification\www \
+c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\de.appplant.cordova.plugin.local-notification\www\local-notification.js \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\org.apache.cordova.device\www \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\org.apache.cordova.device\www\device.js \
 c:\Users\Gianfranco\Documents\dev\ionic\RememberMyManga\platforms\android\assets\www\plugins\uk.co.whiteoctober.cordova.appversion\www \
