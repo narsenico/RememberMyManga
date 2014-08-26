@@ -72,6 +72,7 @@ angular.module('starter.services', [])
 .factory('ComicsReader', function ($filter) {
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
+	var lastRemoved = null;
 
 	//localstorage DB
 	var DB = {
@@ -164,8 +165,17 @@ angular.module('starter.services', [])
 		remove: function(item) {
 			var id = item.id;
 			var idx = this.comics.indexByKey(item.id, 'id');
-			if (idx > -1)
+			if (idx > -1) {
+				lastRemoved = [idx, this.comics[idx]];
 				this.comics.splice(idx, 1);
+			}
+		},
+		//
+		undoRemove: function() {
+			console.log("undo")
+			if (lastRemoved) {
+				this.comics.splice(lastRemoved[0], 0, lastRemoved[1]);
+			}
 		},
 		//
 		clear: function() {
@@ -175,7 +185,7 @@ angular.module('starter.services', [])
 		repairData: function() {
 			if (this.comics) {
 				for (var ii=0; ii<this.comics.length; ii++) {
-					this.comics[ii].updated();
+					updated(this.comics[ii]);
 
 					angular.forEach(
 						_.filter(_.keys(this.comics[ii]), function(v) { return _.str.startsWith(v, '$$') }), 

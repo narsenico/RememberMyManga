@@ -78,6 +78,71 @@
 	/*background-color: #78FA89;*/
 }
 
+/* undo */
+.undo-container {
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	z-index: 12;
+	visibility: hidden;
+	width: 250px;
+	max-width: 100%;
+	border-radius: 4px;
+	background-color: rgba(0, 0, 0, 0.4);
+	height: 40px;
+	color: #fff;
+	margin-left: -125px;
+}
+.undo-container>span {
+	line-height: 40px;
+	padding-left: 6px;
+}
+.undo-container>a {
+	float: right;
+	line-height: 22px;
+	min-height: 22px;
+	border: none;
+	background-color: transparent;
+	color: #fff;
+	border-left: solid 1px #fff;
+	margin-top: 9px;
+
+	display: inline-block;
+	text-decoration: none;
+	padding: 0 12px;
+}
+.undo-container.active {
+	-webkit-animation-name: superScaleIn;
+	-moz-animation-name: superScaleIn;
+	animation-name: superScaleIn;
+	-webkit-animation-duration: 0.2s;
+	-moz-animation-duration: 0.2s;
+	animation-duration: 0.2s;
+	-webkit-animation-timing-function: ease-in-out;
+	-moz-animation-timing-function: ease-in-out;
+	animation-timing-function: ease-in-out;
+	-webkit-animation-fill-mode: both;
+	-moz-animation-fill-mode: both;
+	animation-fill-mode: both; 
+}
+.undo-container.undo-showing {
+	visibility: visible;
+}
+.undo-container.undo-hidden {
+	-webkit-animation-name: scaleOut;
+	-moz-animation-name: scaleOut;
+	animation-name: scaleOut;
+	-webkit-animation-duration: 0.1s;
+	-moz-animation-duration: 0.1s;
+	animation-duration: 0.1s;
+	-webkit-animation-timing-function: ease-in-out;
+	-moz-animation-timing-function: ease-in-out;
+	animation-timing-function: ease-in-out;
+	-webkit-animation-fill-mode: both;
+	-moz-animation-fill-mode: both;
+	animation-fill-mode: both; 
+}
+
 /* Comics */
 .item-comics .item-content {
 	min-height: 64px;

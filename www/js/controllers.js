@@ -19,7 +19,7 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, ComicsReader, Settings) {
+.controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, $undoPopup, ComicsReader, Settings) {
   $scope.debugMode = Settings.userOptions.debugMode;
   //rendo disponibile l'elenco allo scope
   $scope.comics = ComicsReader.comics;
@@ -50,6 +50,16 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.removeComicsEntry = function(item) {
     ComicsReader.remove(item);
     ComicsReader.save();
+
+    $timeout(function() {
+      $undoPopup.show({title: "Comics removed"}).then(function(res) {
+        if (res) {
+          ComicsReader.undoRemove();
+          ComicsReader.save();
+        }
+      });
+    }, 250);
+
   };
   //apre il template per l'editing
   $scope.addComicsEntry = function() {
@@ -206,7 +216,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.reset();
 })
 
-.controller('OptionsCtrl', function($scope, $ionicPopup, ComicsReader, Settings) {
+.controller('OptionsCtrl', function($scope, $ionicPopup, $undoPopup, ComicsReader, Settings) {
   //
   $scope.version = "?";
   //
@@ -252,6 +262,9 @@ angular.module('starter.controllers', ['starter.services'])
     ComicsReader.repairData();
     ComicsReader.save();
     ComicsReader.read(ComicsReader.uid, true);
+    $ionicPopup.alert({
+      template: 'Data repaired'
+    })
   };
   //
   $scope.fakeEntries = function() {
@@ -260,16 +273,23 @@ angular.module('starter.controllers', ['starter.services'])
     }
     ComicsReader.save();
   };
+
   //
-  $scope.test = function() {
+  $scope.test = function($event) {
+
     // window.plugin.notification.local.add(
     //   { id: 't001', message: 'test message', title: 'test title' }
     // , function() { console.log("add ", arguments) } );
 
-    $ionicPopup.alert({
-      title: 'Test',
-      template: window.localStorage.getItem('USER_comics')
+    // $ionicPopup.alert({
+    //   title: 'Test',
+    //   template: window.localStorage.getItem('USER_comics')
+    // });
+
+    $undoPopup.show({title: "Comics delted"}).then(function(res) {
+      console.log(res)
     });
+
   };
 })
 ;
