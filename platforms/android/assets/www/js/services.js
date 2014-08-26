@@ -37,25 +37,6 @@ function ComicsEntry(opts) {
 	angular.extend(this, opts);
 }
 
-ComicsEntry.prototype.updated = function() {
-	this.lastUpdate = new Date().getTime();
-}
-
-ComicsEntry.prototype.indexOfRelease = function(number) {
-	for (var ii=0; ii<this.releases.length; ii++) {
-		if (this.releases[ii].number == number) {
-			return ii;
-		}
-	}
-	return -1;
-}
-
-ComicsEntry.prototype.addRelease = function(number, date, price, reminder, purchased) {
-	var cr = new ComicsRelease( { comicsId: this.id, number: number, date: date, price: price, reminder: reminder, purchased: purchased } );
-	this.releases.push( cr );
-	return cr;
-}
-
 ComicsEntry.new = function() {
 	return new ComicsEntry( { id: "new" } );
 }
@@ -88,7 +69,9 @@ var PERIODICITIES = {
 
 angular.module('starter.services', [])
 
-.factory('ComicsReader', function () {
+.factory('ComicsReader', function ($filter) {
+
+	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
 
 	//localstorage DB
 	var DB = {
@@ -142,7 +125,7 @@ angular.module('starter.services', [])
 				item.releases.push(release);
 			}
 			//aggiorno ultima modifica
-			item.updated();
+			updated(item);
 		},
 		//
 		removeRelease: function(item, release) {
@@ -151,14 +134,21 @@ angular.module('starter.services', [])
 				item.releases.splice(idx, 1);
 			}
 			//aggiorno ultima modifica
-			item.updated();
+			updated(item);
 		},
 		//
 		getBestRelease: function(item) {
-			//TODO
-			if (item.releases.length > 0)
-				return item.releases[0];
-			else
+			//ritorna la prima scaduta e non acquistata, altrimenti la prossima non scaduta
+			if (item.releases.length > 0) {
+				var today = $filter('date')(new Date(), 'yyyy-MM-dd');
+				var sorted = _.sortBy(item.releases, function(rel) {
+					return rel.date;
+				});
+
+				return _.find(sorted, function(rel) { /*console.log(item.name, rel.date, rel.purchased);*/ return rel.date < today && rel.purchased != 'T'; }) || 
+					_.find(sorted, function(rel) { return rel.date >= today && rel.purchased != 'T'; }) ||
+					new ComicsRelease();
+			} else
 				return new ComicsRelease();
 		},
 		//
@@ -168,7 +158,7 @@ angular.module('starter.services', [])
 				this.comics.push(item);
 			}
 			//aggiorno ultima modifica
-			item.updated();
+			updated(item);
 		},
 		//
 		remove: function(item) {
@@ -202,7 +192,8 @@ angular.module('starter.services', [])
 
 	var def = {
 		debugMode: false,
-		comicsCompactMode: false
+		comicsCompactMode: false,
+		comicsSearchPublisher: false
 	};
 
 	//localstorage DB

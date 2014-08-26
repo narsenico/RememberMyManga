@@ -7,11 +7,16 @@
   </ion-nav-buttons>
   <ion-content class="has-header" has-bouncing="true">
     <ion-list can-swipe="true">
-      <ion-item class="item release" ng-repeat="rel in releases | orderBy:'number'" href="#">
+      <ion-item class="item rmm-button-right rmm-icon-left release" ng-repeat="rel in releases | orderBy:'number':true">
+        <i class="icon ion-ios7-alarm-outline" ng-show="isExpired(rel)"></i>
         <div class="info">
         	<span>{{rel.number}}</span>
-        	<p>{{rel.date | date : 'dd MMM'}}</p>
+        	<span>{{rel.date | date : 'dd MMM yyyy'}}</span>
+          <!-- <span ng-show="isExpired(rel)">expired</span> -->
         </div>
+
+        <button class="button ion-bag" ng-show="rel.purchased != 'T'" ng-click="setPurchased(entry, rel, 'T')"></button>
+        <button class="button button-positive ion-bag" ng-show="rel.purchased == 'T'" ng-click="setPurchased(entry, rel, 'F')"></button>
         
         <ion-option-button class="button button-positive icon ion-edit"
                            button-href="/app/release/{{entry.id}}/{{rel.number}}">

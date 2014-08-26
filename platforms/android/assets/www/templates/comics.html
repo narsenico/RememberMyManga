@@ -19,15 +19,13 @@
     <ion-list can-swipe="true">
       <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" ng-repeat="item in getComics() | orderBy:'lastUpdate':true" href="#/app/releases/{{item.id}}">
 
-        <!-- <span class="comics-icon">{{item.name.charAt(0).toUpperCase()}}</span> -->
+        <div>
+          <span class="comics-title">{{item.name}}</span>
+          <span class="comics-subtitle">{{item.publisher}}</span>
+          <span class="comics-notes">{{getComicsInfo(item)}}</span>
+          <span class="comics-notes" ng-show="debugMode">{{item.lastUpdate}}</span>
+        </div>
 
-        <span class="comics-title">{{item.name}}</span>
-        <span class="comics-subtitle">{{item.publisher}}</span>
-        <span class="comics-notes">{{getComicsInfo(item)}}</span>
-        <span class="comics-notes" ng-show="debugMode">{{item.lastUpdate}}</span>
-
-        <!-- todo usare template -->
-        <!-- <span class="badge badge-assertive">{{getBestRelease(item).number}}</span> -->
         <best-release comics="item"></best-release>
 
         <ion-option-button class="button button-energized icon ion-plus-round"

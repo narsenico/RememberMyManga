@@ -8,9 +8,8 @@
 	  		<ion-item class="item option-info">Version: {{version}}</ion-item>
 	  		<ion-item class="item" ng-click="deleteAllData()"><i class="icon ion-trash-a"></i> Delete all data</ion-item>
 	  		<ion-item class="item" ng-click="repairData()"><i class="icon ion-hammer"></i> Repair data</ion-item>
-	  		<ion-item class="item" ng-click=""><i class="icon ion-ios7-download"></i> Export</ion-item>
-	  		<ion-item class="item" ng-click=""><i class="icon ion-ios7-upload"></i> Import</ion-item>
 	  		<ion-item class="item" ng-click="resetOptions()"><i class="icon ion-ios7-refresh"></i> Reset options</ion-item>
+	  		<ion-item class="item" ng-click="fakeEntries()"><i class="icon ion-arrow-graph-down-right"></i> Create fake entries</ion-item>
 	  		<ion-item class="item" ng-click="test()"><i class="icon ion-arrow-graph-down-right"></i> Test</ion-item>
 			  <div class="item item-divider">Settings</div>
 			  <ion-item class="item item-toggle">
@@ -26,6 +25,15 @@
 					Comics compact view
 					<label class="toggle">
 						<input type="checkbox" ng-model="userOptions.comicsCompactMode" ng-true-value="true" ng-false-value="false" ng-change="optionsChanged()">
+						<div class="track">
+						<div class="handle"></div>
+						</div>
+					</label>
+				</ion-item>
+				<ion-item class="item item-toggle">
+					Search also in publisher
+					<label class="toggle">
+						<input type="checkbox" ng-model="userOptions.comicsSearchPublisher" ng-true-value="true" ng-false-value="false" ng-change="optionsChanged()">
 						<div class="track">
 						<div class="handle"></div>
 						</div>

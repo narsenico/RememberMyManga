@@ -18,13 +18,9 @@
     <feature name="LocalNotification">
         <param name="android-package" value="de.appplant.cordova.plugin.localnotification.LocalNotification" />
     </feature>
-    <name>RememberMyManga</name>
-    <description>
-        Remember my manga
-    </description>
-    <author email="io.amon@gmail.com" href="">
-      Amonshore
-    </author>
+    <name>NotiMan</name>
+    <description>Remember my manga</description>
+    <author email="io.amon@gmail.com" href="">Amonshore</author>
     <content src="index.html" />
     <access origin="*" />
     <preference name="webviewbounce" value="false" />

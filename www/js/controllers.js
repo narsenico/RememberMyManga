@@ -27,6 +27,9 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.getComics = function() {
     return $scope.comics.filter(function(item) {
       //tolgo spazi superflui con _.str.clean
+      if (Settings.userOptions.comicsSearchPublisher) {
+        return !$scope.search ||  _.str.include(_.str.clean(item.publisher).toLowerCase(), _.str.clean($scope.search).toLowerCase());   
+      }
       return !$scope.search ||  _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()); 
     });
   };
@@ -140,7 +143,7 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, ComicsReader) {
+.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, ComicsReader) {
   $scope.entry = null;
   $scope.releases = [];
 
@@ -153,6 +156,16 @@ angular.module('starter.controllers', ['starter.services'])
     ComicsReader.removeRelease(item, release);
     ComicsReader.save();
   };
+  //
+  $scope.setPurchased = function(item, release, value) {
+    release.purchased = value;
+    ComicsReader.save();
+  };
+  //
+  var today = $filter('date')(new Date(), 'yyyy-MM-dd');
+  $scope.isExpired = function(release) {
+    return !release.date || release.date < today;
+  }
 
   if ($stateParams.comicsId == null) {
     //TODO uscite di tutti i fumetti
@@ -239,6 +252,13 @@ angular.module('starter.controllers', ['starter.services'])
     ComicsReader.repairData();
     ComicsReader.save();
     ComicsReader.read(ComicsReader.uid, true);
+  };
+  //
+  $scope.fakeEntries = function() {
+    for (var ii=1; ii<=10; ii++) {
+      ComicsReader.update( new ComicsEntry( { id: "new", name: "comis" + ii } ) );
+    }
+    ComicsReader.save();
   };
   //
   $scope.test = function() {
