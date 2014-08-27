@@ -196,7 +196,7 @@
 .best-release {
 	position: absolute;
 	right: 16px;
-	top: 9px;
+	top: 14px;
 	/* bottom: 10px; */
 	min-width: 50px;
 	/*border: solid 1px #66CC33;*/
@@ -206,7 +206,7 @@
 
 .best-release:after {
 	position: absolute;
-	top: 2px;
+	top: 6px;
 	left: -6px;
 	width: 0;
 	height: 0;
@@ -228,16 +228,10 @@
 	text-align: center;
 	line-height: 20px;
 	/*border-top: solid 1px #ddd;*/
-	border: solid 1px #66CC33;
+	border-left: solid 1px #ddd;
+	border-right: solid 1px #ddd;
+	border-bottom: solid 1px #ddd;
 }
 
 /* Release */
-.release .info {
-	text-align: center;
-	width: 65px;
-}
-
-.release .info>span:first-child {
-	font-size: 2.5em;
-	font-weight: bold;
-}
+.item-release { }

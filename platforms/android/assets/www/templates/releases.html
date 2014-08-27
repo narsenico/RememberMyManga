@@ -3,30 +3,36 @@
     <button menu-toggle="left"class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
-    <button class="button button-icon icon ion-plus-round" ng-click="showAddRelease(entry)"></button>
+    <button class="button button-icon icon ion-plus-round" ng-click="showAddRelease(entry)" ng-show="entry"></button>
+    <button class="button button-icon icon ion-android-more" ng-show="!entry"></button>
   </ion-nav-buttons>
-  <ion-content class="has-header" has-bouncing="true">
+  <ion-content class="has-header has-footer" has-bouncing="true">
     <ion-list can-swipe="true">
-      <ion-item class="item rmm-button-right rmm-icon-left release" ng-repeat="rel in releases | orderBy:'number':true">
-        <i class="icon ion-ios7-alarm-outline" ng-show="isExpired(rel)"></i>
-        <div class="info">
-        	<span>{{rel.number}}</span>
-        	<span>{{rel.date | date : 'dd MMM yyyy'}}</span>
-          <!-- <span ng-show="isExpired(rel)">expired</span> -->
-        </div>
+      <ion-item class="item item-release rmm-button-right rmm-icon-left release" ng-repeat="rel in releases | orderBy:'release.date'">
+        <i class="icon ion-ios7-alarm-outline" ng-show="isExpired(rel.release)"></i>
 
-        <button class="button ion-bag" ng-show="rel.purchased != 'T'" ng-click="setPurchased(entry, rel, 'T')"></button>
-        <button class="button button-positive ion-bag" ng-show="rel.purchased == 'T'" ng-click="setPurchased(entry, rel, 'F')"></button>
+        <h2>{{rel.entry.name}}</h2>
+        <p>#{{rel.release.number}} {{rel.release.date | date : 'EEE, dd MMM'}}</p>
+        
+        <button class="button ion-bag" ng-show="rel.release.purchased != 'T'" ng-click="setPurchased(rel, 'T')"></button>
+        <button class="button button-positive ion-bag" ng-show="rel.release.purchased == 'T'" ng-click="setPurchased(rel, 'F')"></button>
         
         <ion-option-button class="button button-positive icon ion-edit"
-                           button-href="/app/release/{{entry.id}}/{{rel.number}}">
+                           button-href="/app/release/{{rel.entry.id}}/{{rel.release.number}}">
           Edit
         </ion-option-button>
         <ion-option-button class="button button-assertive icon ion-trash-a"
-                           ng-click="removeRelease(entry, rel)">
+                           ng-click="removeRelease(rel)">
           Del
         </ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>
+  <div class="bar bar-footer">
+    <div class="button-bar">
+      <a class="button" ng-click="changeFilter(purchasedVisible, 'everytime')">All</a>
+      <a class="button" ng-click="changeFilter(purchasedVisible, 'week')">This week</a>
+      <a class="button" ng-click="changeFilter(purchasedVisible, 'month')">This month</a>
+    </div>
+  </div>
 </ion-view>

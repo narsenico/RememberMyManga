@@ -1,6 +1,7 @@
 /**
  * Ionic Angula module: rmm
  * - $undoPopup: Undo Popup (google way)
+ * - $datex: date munipulation utilities
  */
 
 var IonicModule = angular.module('rmm', ['ngAnimate', 'ngSanitize', 'ui.router']),
@@ -24,7 +25,7 @@ TODO:
 - gestire back
 */
 
- IonicModule
+IonicModule
 .factory('$undoPopup', [
   '$ionicTemplateLoader',
   '$ionicBackdrop',
@@ -148,4 +149,27 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
     } //end focusInput
   }
 
-}]);
+}]); //end $undoPopup
+
+IonicModule
+.factory('$datex', function() {
+  var $datex = {
+    firstDayOfWeek: function(date) {
+      if (!date) date = new Date();
+      return new Date(date).setDate(date.getDate() - date.getDay());
+    },
+    lastDayOfWeek: function(date) {
+      if (!date) date = new Date();
+      return new Date(date).setDate(date.getDate() - date.getDay() + 6);
+    },
+    firstDayOfMonth: function(date) {
+      if (!date) date = new Date();
+      return new Date(date).setDate(1);
+    },
+    lastDayOfMonth: function(date) {
+      if (!date) date = new Date();
+      return new Date(date.getFullYear(), date.getMonth()+1, 0);
+    }
+  };
+  return $datex;
+}); //end $datex

@@ -153,42 +153,73 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, ComicsReader) {
+.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, ComicsReader) {
   $scope.entry = null;
   $scope.releases = [];
+  $scope.purchasedVisible = true;
+  $scope.period = 'week'; //month, everytime
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {
     $location.path("/app/release/" + item.id + "/new").replace();
   };
   //
-  $scope.removeRelease = function(item, release) {
-    ComicsReader.removeRelease(item, release);
+  $scope.removeRelease = function(rel) {
+    ComicsReader.removeRelease(rel.entry, rel.release);
     ComicsReader.save();
   };
   //
-  $scope.setPurchased = function(item, release, value) {
-    release.purchased = value;
+  $scope.setPurchased = function(rel, value) {
+    rel.release.purchased = value;
     ComicsReader.save();
+  };
+  //
+  $scope.changeFilter = function(purchasedVisible, period) {
+    $scope.purchasedVisible = purchasedVisible;
+    $scope.period = period;
+
+    var arr;
+    if ($stateParams.comicsId == null) {
+      arr = ComicsReader.comics;
+    } else {
+      //uscite di un fumetto
+      $scope.entry = ComicsReader.getComicsById($stateParams.comicsId);
+      arr = [ $scope.entry ];
+    }
+
+    //calcolo il range delle date in base a period
+    var dtFrom, dtTo;
+    var today = new Date();
+    if (period == 'week') {
+      dtFrom = $filter('date')($datex.firstDayOfWeek(today), 'yyyy-MM-dd');
+      dtTo = $filter('date')($datex.lastDayOfWeek(today), 'yyyy-MM-dd');
+    } else if (period == 'month') {
+      dtFrom = $filter('date')($datex.firstDayOfMonth(today), 'yyyy-MM-dd');
+      dtTo = $filter('date')($datex.lastDayOfMonth(today), 'yyyy-MM-dd');
+    }
+
+    $scope.releases = [];
+    for (var ii=0; ii<arr.length; ii++) {
+      angular.forEach(arr[ii].releases, function(v, k) {
+        //console.log(arr[ii].name, v.date, dtFrom, dtTo)
+
+        if ($scope.purchasedVisible || v.purchased != 'T') {
+          if (!dtFrom || !v.date || v.date >= dtFrom) {
+            if (!dtTo || !v.date || v.date <= dtTo) {
+              $scope.releases.push( { entry: arr[ii], release: v } );
+            }
+          }
+        }
+      });
+    }
   };
   //
   var today = $filter('date')(new Date(), 'yyyy-MM-dd');
   $scope.isExpired = function(release) {
-    return !release.date || release.date < today;
+    return release.date && release.date < today;
   }
 
-  if ($stateParams.comicsId == null) {
-    //TODO uscite di tutti i fumetti
-    for (var ii=0; ii<ComicsReader.comics.length; ii++) {
-      angular.forEach(ComicsReader.comics[ii].releases, function(v, k) {
-        $scope.releases.push(v);
-      });
-    }
-  } else {
-    //uscite di un fumetto
-    $scope.entry = ComicsReader.getComicsById($stateParams.comicsId);
-    $scope.releases = $scope.entry.releases;
-  }
+  $scope.changeFilter($scope.purchasedVisible);
 })
 .controller('ReleaseEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, ComicsReader) {
   $scope.entry = ComicsReader.getComicsById($stateParams.comicsId);
@@ -196,6 +227,13 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.master = ComicsReader.getReleaseById($scope.entry, $stateParams.releaseId);
   //aggiorno l'originale e torno indietro
   $scope.update = function(release) {
+
+    //TODO eliminare eventuali notifiche create in precedenza
+    //  con comicsId + number (master)
+
+    //TODO se !purchased e !expired creare notifica locale
+    // con comicsId + number (release)
+
     angular.copy(release, $scope.master);
     ComicsReader.updateRelease($scope.entry, $scope.master);
     ComicsReader.save();
@@ -216,7 +254,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.reset();
 })
 
-.controller('OptionsCtrl', function($scope, $ionicPopup, $undoPopup, ComicsReader, Settings) {
+.controller('OptionsCtrl', function($scope, $ionicPopup, $undoPopup, $ionicPopover, ComicsReader, Settings) {
   //
   $scope.version = "?";
   //
@@ -268,9 +306,10 @@ angular.module('starter.controllers', ['starter.services'])
   };
   //
   $scope.fakeEntries = function() {
-    for (var ii=1; ii<=10; ii++) {
-      ComicsReader.update( new ComicsEntry( { id: "new", name: "comis" + ii } ) );
-    }
+    ComicsReader.update( new ComicsEntry( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
+    ComicsReader.update( new ComicsEntry( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
+    ComicsReader.update( new ComicsEntry( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
+    ComicsReader.update( new ComicsEntry( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
     ComicsReader.save();
   };
 
@@ -286,9 +325,11 @@ angular.module('starter.controllers', ['starter.services'])
     //   template: window.localStorage.getItem('USER_comics')
     // });
 
-    $undoPopup.show({title: "Comics delted"}).then(function(res) {
-      console.log(res)
-    });
+    // $undoPopup.show({title: "Comics delted"}).then(function(res) {
+    //   console.log(res)
+    // });
+
+    $ionicPopover.fromTemplate('<ion-popover-view><ion-header-bar><h1 class="title">My Popover Title</h1></ion-header-bar><ion-content>content</ion-content></ion-popover-view>', { scope: $scope }).show($event);
 
   };
 })

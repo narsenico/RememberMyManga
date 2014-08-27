@@ -143,11 +143,12 @@ angular.module('starter.services', [])
 			if (item.releases.length > 0) {
 				var today = $filter('date')(new Date(), 'yyyy-MM-dd');
 				var sorted = _.sortBy(item.releases, function(rel) {
-					return rel.date;
+					return rel.date || rel.number;
 				});
 
 				return _.find(sorted, function(rel) { /*console.log(item.name, rel.date, rel.purchased);*/ return rel.date < today && rel.purchased != 'T'; }) || 
 					_.find(sorted, function(rel) { return rel.date >= today && rel.purchased != 'T'; }) ||
+					_.find(sorted, function(rel) { return !rel.date && rel.purchased != 'T'; }) ||
 					new ComicsRelease();
 			} else
 				return new ComicsRelease();
