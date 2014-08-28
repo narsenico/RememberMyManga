@@ -25,7 +25,7 @@
     <feature name="Toast">
         <param name="android-package" value="nl.xservices.plugins.Toast" />
     </feature>
-    <name>NotiMan</name>
+    <name>Comikku</name>
     <description>Remember my manga</description>
     <author email="io.amon@gmail.com" href="">Amonshore</author>
     <content src="index.html" />

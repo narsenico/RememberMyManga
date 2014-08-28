@@ -6,33 +6,33 @@
   <ion-content class="has-header">
     <form name="form" novalidate class="validation-form">
 		  <label class="item item-input item-key">
-		  	<span class="input-label rmm-required">Name</span>
+		  	<span class="input-label rmm-required icon ion-key"> Name</span>
 		    <input type="text" placeholder="comics title" ng-model="entry.name" required>
 		  </label>
 		  <label class="item item-input">
-		    <span class="input-label">Series</span>
+		    <span class="input-label icon ion-ios7-albums-outline"> Series</span>
 		    <input type="text" placeholder="comics series" ng-model="entry.series">
 		  </label>
 		  <label class="item item-input">
-		    <span class="input-label">Publisher</span>
+		    <span class="input-label icon ion-ios7-home-outline"> Publisher</span>
 		    <input type="text" placeholder="publisher" ng-model="entry.publisher">
 		  </label>
 		  <label class="item item-input">
-		    <span class="input-label">Authors</span>
+		    <span class="input-label icon ion-ios7-people-outline"> Authors</span>
 		    <input type="text" placeholder="authors" ng-model="entry.authors">
 		  </label>
 		  <label class="item item-input">
-		    <span class="input-label">Price</span>
+		    <span class="input-label icon ion-cash"> Price</span>
 		    <input type="number" placeholder="price" ng-model="entry.price" onfocus="this.select()">
 		  </label>
 		  <label class="item item-input item-select">
-		    <span class="input-label">Periodicity</span>
+		    <span class="input-label icon ion-ios7-calendar-outline"> Periodicity</span>
 		    <select ng-model="entry.periodicity" ng-options="k as v for (k, v) in periodicities">
       		<option value=""></option>
       	</select>
 		  </label>
 		  <label class="item item-input">
-		  	<span class="input-label">Reserved</span>
+		  	<span class="input-label icon ion-ios7-filing-outline"> Reserved</span>
 			  <label class="toggle" style="float: right">
 	   			<input type="checkbox" ng-model="entry.reserved" ng-true-value="T">
 	   			<div class="track">
@@ -41,7 +41,7 @@
 				</label>
 			</label>
 		  <label class="item item-input item-stacked-label">
-		    <span class="input-label">Notes</span>
+		    <span class="input-label icon ion-ios7-paper-outline"> Notes</span>
 		    <input type="text" placeholder="notes" ng-model="entry.notes">
 		  </label>
 		  <div class="content padding">

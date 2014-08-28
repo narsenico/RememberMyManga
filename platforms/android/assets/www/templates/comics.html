@@ -20,10 +20,10 @@
       <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" ng-repeat="item in getComics() | orderBy:'lastUpdate':true" href="#/app/releases/{{item.id}}">
 
         <div>
-          <span class="comics-title">{{item.name}}</span>
+          <span class="comics-title">{{item.name}} <i class="icon ion-ios7-filing-outline" ng-show="item.reserved=='T'"></i></span>
           <span class="comics-subtitle">{{item.publisher}}</span>
           <span class="comics-notes">{{getComicsInfo(item)}}</span>
-          <span class="comics-notes" ng-show="debugMode">{{item.lastUpdate}}</span>
+          <span class="comics-notes" ng-show="debugMode">id {{item.id}} last upd {{item.lastUpdate}}</span>
         </div>
 
         <best-release comics="item"></best-release>

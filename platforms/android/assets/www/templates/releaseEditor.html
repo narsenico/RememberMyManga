@@ -9,20 +9,20 @@
   <ion-content class="has-header">
     <form name="form" novalidate class="validation-form">
 		  <label class="item item-input item-key">
-		    <span class="input-label rmm-required">Number</span>
+		    <span class="input-label rmm-required icon ion-key"> Number</span>
 		    <input type="number" placeholder="release number" ng-model="release.number" required>
 		  </label>
 		  <label class="item item-input">
-		    <span class="input-label">Date</span>
+		    <span class="input-label icon ion-ios7-calendar-outline"> Date</span>
 		    <input type="date" name="rdate" ng-model="release.date" ng-required="release.reminder=='1'">
 		    <span class="rmm-required-message" ng-show="form.rdate.$error.required">Release date is required with reminder checked!</span>
 		  </label>
 		  <label class="item item-input">
-		    <span class="input-label">Price</span>
+		    <span class="input-label icon ion-cash"> Price</span>
 		    <input type="number" placeholder="price" ng-model="release.price">
 		  </label>
 		  <label class="item item-input">
-		  	<span class="input-label">Reminder</span>
+		  	<span class="input-label icon ion-ios7-alarm-outline"> Reminder</span>
 			  <label class="toggle" style="float: right">
 	   			<input type="checkbox" ng-model="release.reminder" ng-true-value="1">
 	   			<div class="track">
@@ -31,11 +31,11 @@
 				</label>
 			</label>
 		  <label class="item item-input">
-		    <span class="input-label">Reminder time</span>
+		    <span class="input-label icon ion-ios7-clock-outline"> Reminder time</span>
 		    <input type="time" placeholder="time" ng-model="release.reminderTime" ng-disabled="release.reminder!=1 || !release.date">
 		  </label>
 		  <label class="item item-input">
-		  	<span class="input-label">Purchased</span>
+		  	<span class="input-label icon ion-bag"> Purchased</span>
 			  <label class="toggle" style="float: right">
 	   			<input type="checkbox" ng-model="release.purchased" ng-true-value="T">
 	   			<div class="track">

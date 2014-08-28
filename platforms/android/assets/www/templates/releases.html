@@ -9,7 +9,7 @@
   <ion-content class="has-header has-footer" has-bouncing="true">
     <ion-list can-swipe="true">
       <ion-item class="item item-release rmm-button-right release" ng-repeat="rel in releases | orderBy:'release.date'">
-        <h2>{{rel.entry.name}} <i class="icon ion-ios7-alarm-outline" ng-show="isExpired(rel.release)"></i></h2>
+        <h2>{{rel.entry.name}} <i class="icon ion-ios7-filing-outline" ng-show="rel.entry.reserved=='T'"></i> <i class="icon ion-ios7-alarm-outline" ng-show="isExpired(rel.release)"></i></h2>
         <p><b>#{{rel.release.number}}</b> {{rel.release.date | date : 'EEE, dd MMM'}}</p>
         
         <button class="button ion-bag" ng-show="rel.release.purchased != 'T'" ng-click="setPurchased(rel, 'T')"></button>

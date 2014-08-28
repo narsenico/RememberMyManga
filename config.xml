@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="it.amonshore.rmm" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>NotiMan</name>
+  <name>Comikku</name>
   <description>Remember my manga</description>
   <author email="io.amon@gmail.com" href="">Amonshore</author>
   <content src="index.html"/>

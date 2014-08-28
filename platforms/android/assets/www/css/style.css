@@ -157,10 +157,10 @@
 }
 .toast-container.bottom {
 	top: initial;
-	bottom: 40px;
+	bottom: 60px;
 }
 .toast-container.top {
-	top: 40px;
+	top: 60px;
 	bottom: initial;
 }
 
@@ -184,7 +184,7 @@
 .item-comics .comics-subtitle {
 	display: block;
 	font-size: 0.7em;
-	font-weight: bold;
+	font-weight: normal;
 	color: #444;
 }
 

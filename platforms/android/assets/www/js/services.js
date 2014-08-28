@@ -24,7 +24,7 @@ function ComicsEntry(opts) {
 	this.publisher = null;
 	this.authors = null;
 	this.price = 0.0;
-	this.periodicity = "M1";
+	this.periodicity = null;
 	this.reserved = "F";
 	this.notes = null;
 	this.releases = [];
@@ -256,9 +256,17 @@ angular.module('starter.services', [])
 		comicsSearchPublisher: false
 	};
 
+	var filters = {
+		releases: {
+			purchasedVisible: true,
+			period: 'week' 
+		}
+	}
+
 	//localstorage DB
 	var DB = {
 		//
+		filters: filters,
 		userOptions: angular.copy(def),
 		//
 		load: function() {

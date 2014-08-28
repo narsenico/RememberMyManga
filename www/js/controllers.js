@@ -155,11 +155,11 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, $toast, ComicsReader) {
+.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, $toast, ComicsReader, Settings) {
   $scope.entry = null;
   $scope.releases = [];
-  $scope.purchasedVisible = true;
-  $scope.period = 'week'; //month, everytime
+  $scope.purchasedVisible = Settings.filters.releases.purchasedVisible;
+  $scope.period = Settings.filters.releases.period; //week, month, everytime
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {
@@ -179,8 +179,8 @@ angular.module('starter.controllers', ['starter.services'])
   };
   //
   $scope.changeFilter = function(purchasedVisible, period) {
-    $scope.purchasedVisible = purchasedVisible;
-    $scope.period = period;
+    $scope.purchasedVisible = Settings.filters.releases.purchasedVisible = purchasedVisible;
+    $scope.period = Settings.filters.releases.period = period;
 
     var arr;
     if ($stateParams.comicsId == null) {
@@ -199,12 +199,12 @@ angular.module('starter.controllers', ['starter.services'])
       dtFrom = $filter('date')($datex.firstDayOfWeek(today), 'yyyy-MM-dd');
       dtTo = $filter('date')($datex.lastDayOfWeek(today), 'yyyy-MM-dd');
       toastMsg = "This Week's Releases";
-      toastMsgEmpty = "No releases for this week";
+      toastMsgEmpty = "No releases this week";
     } else if (period == 'month') {
       dtFrom = $filter('date')($datex.firstDayOfMonth(today), 'yyyy-MM-dd');
       dtTo = $filter('date')($datex.lastDayOfMonth(today), 'yyyy-MM-dd');
       toastMsg = "This Month's Releases";
-      toastMsgEmpty = "No releases for this month";
+      toastMsgEmpty = "No releases this month";
     } else {
       toastMsg = "All releases";
       toastMsgEmpty = "No releases";
@@ -236,7 +236,7 @@ angular.module('starter.controllers', ['starter.services'])
     return release.date && release.date < today;
   }
 
-  $scope.changeFilter($scope.purchasedVisible, 'week');
+  $scope.changeFilter($scope.purchasedVisible, $scope.period);
 })
 .controller('ReleaseEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, ComicsReader) {
   $scope.entry = ComicsReader.getComicsById($stateParams.comicsId);
