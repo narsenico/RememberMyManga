@@ -1,6 +1,8 @@
 /**
  * Ionic Angula module: rmm
  * - $undoPopup: Undo Popup (google way)
+ *   promise return: 'ok', 'timeout', 'discarded'
+ * - $toast: simple toast
  * - $datex: date munipulation utilities
  */
 
@@ -17,6 +19,10 @@ var UNDO_TPL =
     '<a href="" ng-click="$undo($event)" ng-bind-html="text" autofocus></a>'
   '</div>';
 
+var TOAST_TPL = 
+  '<div class="toast-container" ng-class="position">' +
+    '<span ng-bind-html="text"></span>'
+  '</div>';
 /*
 TODO: 
 - se già aperto chiuderlo con resolve false -> OK
@@ -28,14 +34,10 @@ TODO:
 IonicModule
 .factory('$undoPopup', [
   '$ionicTemplateLoader',
-  '$ionicBackdrop',
   '$q',
   '$timeout',
-  '$rootScope',
   '$document',
-  '$compile',
-  '$ionicPlatform',
-function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $document, $compile, $ionicPlatform) {
+function($ionicTemplateLoader, $q, $timeout, $document) {
 	
   var previousUndo = null;
 	var $undoPopup = {
@@ -49,8 +51,12 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
 		options = extend({
 			scope: null,
 			title: 'Operation done',
-			text: '<i class="icon ion-reply"></i> CANCEL'
+			text: '<i class="icon ion-reply"></i> CANCEL',
+      timeout: 0 //nessun timeout
 		}, options || {});
+
+    if (options.timeout == 'short') options.timeout = 2000;
+    else if (options.timeout == 'long') options.timeout = 10000;
 
 		var popupPromise = $ionicTemplateLoader.compile({
 			template: UNDO_TPL,
@@ -72,10 +78,9 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
       	title: options.title,
       	text: options.text,
       	$undo: function(event) {
-      		var result = (function(e) { return true; })(event);
       		event = event.originalEvent || event; //jquery events
       		if (!event.defaultPrevented) {
-      			responseDeferred.resolve(result);
+      			responseDeferred.resolve('ok');
       		}
       	}
       });
@@ -91,6 +96,12 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
           self.element.removeClass('undo-hidden');
           self.element.addClass('undo-showing active');
           focusInput(self.element);
+
+          if (options.timeout > 0) {
+            self.timeoutPromise = $timeout(function() {
+              responseDeferred.resolve('timeout');
+            }, options.timeout);
+          }
         });
       };
       self.hide = function(callback) {
@@ -108,6 +119,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
         self.hide(function() {
           self.element.remove();
           self.scope.$destroy();
+          if (self.timeoutPromise) $timeout.cancel(self.timeoutPromise);
         });
 
         self.removed = true;
@@ -125,7 +137,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
 		var popupPromise = $undoPopup._createPopup(options);
 
     if (previousUndo) {
-      previousUndo.responseDeferred.resolve(false);
+      previousUndo.responseDeferred.resolve('discarded');
     }
 
     var resultPromise = $timeout(angular.noop, 0)
@@ -150,6 +162,126 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
   }
 
 }]); //end $undoPopup
+
+IonicModule
+.factory('$toast', [
+  '$ionicTemplateLoader',
+  '$q',
+  '$timeout',
+  '$document',
+function($ionicTemplateLoader, $q, $timeout, $document) {
+  
+  var previousToast = null;
+  var $toast = {
+    show: showToast,
+    _createToast: createToast
+  }; //end $undoPopup
+
+  return $toast;
+
+  function createToast(options) {
+    if (typeof(options) == "string") options = { text: options };
+
+    options = extend({
+      scope: null,
+      text: 'message',
+      timeout: 'short',
+      position: 'bottom'
+    }, options || {});
+
+    if (options.timeout == 'short' || options.timeout < 0) options.timeout = 2000;
+    else if (options.timeout == 'long') options.timeout = 10000;
+
+    var popupPromise = $ionicTemplateLoader.compile({
+      template: TOAST_TPL,
+      scope: options.scope && options.scope.$new(),
+      appendTo: $document[0].body
+    });
+    //per ora non supporto il template da URL
+    var contentPromise =  $q.when(options.template || options.content || '');
+
+    return $q.all([popupPromise, contentPromise])
+    .then(function(results) {
+      var self = results[0];
+      var content = results[1];
+      var responseDeferred = $q.defer();
+
+      self.responseDeferred = responseDeferred;
+
+      extend(self.scope, {
+        text: options.text,
+        position: options.position
+      });
+
+      self.show = function() {
+        if (self.isShown) return;
+
+        self.isShown = true;
+        ionic.requestAnimationFrame(function() {
+          //if hidden while waiting for raf, don't show
+          if (!self.isShown) return;
+
+          self.element.removeClass('toast-hidden');
+          self.element.addClass('toast-showing active');
+
+          if (options.timeout > 0) {
+            self.timeoutPromise = $timeout(function() {
+              responseDeferred.resolve('timeout');
+            }, options.timeout);
+          }
+        });
+      };
+      self.hide = function(callback) {
+        callback = callback || angular.noop;
+        if (!self.isShown) return callback();
+
+        self.isShown = false;
+        self.element.removeClass('active');
+        self.element.addClass('toast-hidden');
+        $timeout(callback, 250);
+      };
+      self.remove = function() {
+        if (self.removed) return;
+
+        self.hide(function() {
+          self.element.remove();
+          self.scope.$destroy();
+          if (self.timeoutPromise) $timeout.cancel(self.timeoutPromise);
+        });
+
+        self.removed = true;
+      };
+
+      return self;
+    });
+  } //end createPopup
+
+  function onHardwareBackButton(e) {
+    //TODO risolvere se back premuto
+  } //end onHardwareBackButton
+
+  function showToast(options) {
+    var popupPromise = $toast._createToast(options);
+
+    if (previousToast) {
+      previousToast.responseDeferred.resolve('discarded');
+    }
+
+    var resultPromise = $timeout(angular.noop, 0)
+    .then(function() { return popupPromise; })
+    .then(function(popup) {
+      previousToast = popup;
+      popup.show();
+      return popup.responseDeferred.promise.then(function(result) {
+        popup.remove();
+        return result;
+      });
+    });
+
+    return resultPromise;
+  } //end showToast
+
+}]); //end $toast
 
 IonicModule
 .factory('$datex', function() {

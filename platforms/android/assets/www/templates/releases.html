@@ -4,15 +4,13 @@
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
     <button class="button button-icon icon ion-plus-round" ng-click="showAddRelease(entry)" ng-show="entry"></button>
-    <button class="button button-icon icon ion-android-more" ng-show="!entry"></button>
+    <!-- <button class="button button-icon icon ion-android-more" ng-show="!entry"></button> -->
   </ion-nav-buttons>
   <ion-content class="has-header has-footer" has-bouncing="true">
     <ion-list can-swipe="true">
-      <ion-item class="item item-release rmm-button-right rmm-icon-left release" ng-repeat="rel in releases | orderBy:'release.date'">
-        <i class="icon ion-ios7-alarm-outline" ng-show="isExpired(rel.release)"></i>
-
-        <h2>{{rel.entry.name}}</h2>
-        <p>#{{rel.release.number}} {{rel.release.date | date : 'EEE, dd MMM'}}</p>
+      <ion-item class="item item-release rmm-button-right release" ng-repeat="rel in releases | orderBy:'release.date'">
+        <h2>{{rel.entry.name}} <i class="icon ion-ios7-alarm-outline" ng-show="isExpired(rel.release)"></i></h2>
+        <p><b>#{{rel.release.number}}</b> {{rel.release.date | date : 'EEE, dd MMM'}}</p>
         
         <button class="button ion-bag" ng-show="rel.release.purchased != 'T'" ng-click="setPurchased(rel, 'T')"></button>
         <button class="button button-positive ion-bag" ng-show="rel.release.purchased == 'T'" ng-click="setPurchased(rel, 'F')"></button>
@@ -30,9 +28,9 @@
   </ion-content>
   <div class="bar bar-footer">
     <div class="button-bar">
-      <a class="button" ng-click="changeFilter(purchasedVisible, 'everytime')">All</a>
-      <a class="button" ng-click="changeFilter(purchasedVisible, 'week')">This week</a>
-      <a class="button" ng-click="changeFilter(purchasedVisible, 'month')">This month</a>
+      <a class="button" ng-click="changeFilter(purchasedVisible, 'everytime')" ng-class="{'button-positive': period=='everytime'}">All</a>
+      <a class="button" ng-click="changeFilter(purchasedVisible, 'week')" ng-class="{'button-positive': period=='week'}">This week</a>
+      <a class="button" ng-click="changeFilter(purchasedVisible, 'month')" ng-class="{'button-positive': period=='month'}">This month</a>
     </div>
   </div>
 </ion-view>

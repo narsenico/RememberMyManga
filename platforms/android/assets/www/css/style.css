@@ -78,8 +78,9 @@
 	/*background-color: #78FA89;*/
 }
 
-/* undo */
-.undo-container {
+/* undo, toast */
+.undo-container,
+.toast-container {
 	position: fixed;
 	bottom: 20px;
 	left: 50%;
@@ -93,11 +94,16 @@
 	color: #fff;
 	margin-left: -125px;
 }
-.undo-container>span {
+.toast-container {
+	text-align: center;
+}
+.undo-container>span,
+.toast-container>span {
 	line-height: 40px;
 	padding-left: 6px;
 }
-.undo-container>a {
+.undo-container>a,
+.toast-container>a {
 	float: right;
 	line-height: 22px;
 	min-height: 22px;
@@ -111,7 +117,8 @@
 	text-decoration: none;
 	padding: 0 12px;
 }
-.undo-container.active {
+.undo-container.active,
+.toast-container.active {
 	-webkit-animation-name: superScaleIn;
 	-moz-animation-name: superScaleIn;
 	animation-name: superScaleIn;
@@ -125,10 +132,12 @@
 	-moz-animation-fill-mode: both;
 	animation-fill-mode: both; 
 }
-.undo-container.undo-showing {
+.undo-container.undo-showing,
+.toast-container.toast-showing {
 	visibility: visible;
 }
-.undo-container.undo-hidden {
+.undo-container.undo-hidden,
+.toast-container.toast-hidden {
 	-webkit-animation-name: scaleOut;
 	-moz-animation-name: scaleOut;
 	animation-name: scaleOut;
@@ -141,6 +150,18 @@
 	-webkit-animation-fill-mode: both;
 	-moz-animation-fill-mode: both;
 	animation-fill-mode: both; 
+}
+.toast-container.middle {
+	top: 50%;
+	bottom: initial;
+}
+.toast-container.bottom {
+	top: initial;
+	bottom: 40px;
+}
+.toast-container.top {
+	top: 40px;
+	bottom: initial;
 }
 
 /* Comics */
@@ -216,11 +237,20 @@
 	content: '';
 }
 
+.best-release.expired:after {
+	border-right-color: #EF4E3A;
+}
+
 .best-release .number {
 	font-size: 1.2em;
 	text-align: center;
 	line-height: 25px;
 	background-color: #66CC33;
+}
+
+.best-release.expired .number {
+	background-color: #EF4E3A;
+	color: #fff;
 }
 
 .best-release .date {
@@ -235,3 +265,11 @@
 
 /* Release */
 .item-release { }
+
+.item-release .item-content {
+	padding-bottom: 4px;
+}
+
+.item-release .item-content .button {
+	top: 20px;
+}

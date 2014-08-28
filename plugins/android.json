@@ -23,6 +23,14 @@
                         {
                             "xml": "<feature name=\"LocalNotification\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.localnotification.LocalNotification\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -48,6 +56,12 @@
                             "xml": "<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\" />",
                             "count": 1
                         }
+                    ],
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 1
+                        }
                     ]
                 }
             }
@@ -67,6 +81,12 @@
             "PACKAGE_NAME": "it.amonshore.rmm"
         },
         "de.appplant.cordova.plugin.local-notification": {
+            "PACKAGE_NAME": "it.amonshore.rmm"
+        },
+        "org.apache.cordova.file": {
+            "PACKAGE_NAME": "it.amonshore.rmm"
+        },
+        "nl.x-services.plugins.toast": {
             "PACKAGE_NAME": "it.amonshore.rmm"
         }
     },

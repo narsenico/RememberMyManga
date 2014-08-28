@@ -52,8 +52,8 @@ angular.module('starter.controllers', ['starter.services'])
     ComicsReader.save();
 
     $timeout(function() {
-      $undoPopup.show({title: "Comics removed"}).then(function(res) {
-        if (res) {
+      $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
+        if (res == 'ok') {
           ComicsReader.undoRemove();
           ComicsReader.save();
         }
@@ -91,8 +91,10 @@ angular.module('starter.controllers', ['starter.services'])
     scope: {
       comics: '='
     },
-    controller: function($scope, ComicsReader) {
+    controller: function($scope, $filter, ComicsReader) {
       $scope.best = ComicsReader.getBestRelease($scope.comics);
+      var today = $filter('date')(new Date(), 'yyyy-MM-dd');
+      $scope.expired = $scope.best.date && $scope.best.date < today;
     },
     templateUrl: 'templates/bestRelease.html'
   };
@@ -153,7 +155,7 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, ComicsReader) {
+.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, $toast, ComicsReader) {
   $scope.entry = null;
   $scope.releases = [];
   $scope.purchasedVisible = true;
@@ -172,6 +174,8 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.setPurchased = function(rel, value) {
     rel.release.purchased = value;
     ComicsReader.save();
+
+    $toast.show(value == 'T' ? "Release purchased" : "Purchase canceled");
   };
   //
   $scope.changeFilter = function(purchasedVisible, period) {
@@ -190,12 +194,20 @@ angular.module('starter.controllers', ['starter.services'])
     //calcolo il range delle date in base a period
     var dtFrom, dtTo;
     var today = new Date();
+    var toastMsg, toastMsgEmpty;
     if (period == 'week') {
       dtFrom = $filter('date')($datex.firstDayOfWeek(today), 'yyyy-MM-dd');
       dtTo = $filter('date')($datex.lastDayOfWeek(today), 'yyyy-MM-dd');
+      toastMsg = "This Week's Releases";
+      toastMsgEmpty = "No releases for this week";
     } else if (period == 'month') {
       dtFrom = $filter('date')($datex.firstDayOfMonth(today), 'yyyy-MM-dd');
       dtTo = $filter('date')($datex.lastDayOfMonth(today), 'yyyy-MM-dd');
+      toastMsg = "This Month's Releases";
+      toastMsgEmpty = "No releases for this month";
+    } else {
+      toastMsg = "All releases";
+      toastMsgEmpty = "No releases";
     }
 
     $scope.releases = [];
@@ -212,6 +224,11 @@ angular.module('starter.controllers', ['starter.services'])
         }
       });
     }
+
+    if ($scope.releases.length > 0)
+      $toast.show(toastMsg);
+    else
+      $toast.show(toastMsgEmpty);
   };
   //
   var today = $filter('date')(new Date(), 'yyyy-MM-dd');
@@ -219,7 +236,7 @@ angular.module('starter.controllers', ['starter.services'])
     return release.date && release.date < today;
   }
 
-  $scope.changeFilter($scope.purchasedVisible);
+  $scope.changeFilter($scope.purchasedVisible, 'week');
 })
 .controller('ReleaseEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, ComicsReader) {
   $scope.entry = ComicsReader.getComicsById($stateParams.comicsId);
@@ -254,7 +271,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.reset();
 })
 
-.controller('OptionsCtrl', function($scope, $ionicPopup, $undoPopup, $ionicPopover, ComicsReader, Settings) {
+.controller('OptionsCtrl', function($scope, $ionicPopup, $undoPopup, $toast, $ionicPopover, $cordovaDevice, $cordovaFile, $cordovaToast, ComicsReader, Settings) {
   //
   $scope.version = "?";
   //
@@ -305,6 +322,15 @@ angular.module('starter.controllers', ['starter.services'])
     })
   };
   //
+  $scope.backup = function() {
+    ComicsReader.backupDataToFile();
+  };
+  //
+  $scope.restore = function() {
+    ComicsReader.restoreDataFromFile();
+    ComicsReader.save();
+  };
+  //
   $scope.fakeEntries = function() {
     ComicsReader.update( new ComicsEntry( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
     ComicsReader.update( new ComicsEntry( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
@@ -325,12 +351,35 @@ angular.module('starter.controllers', ['starter.services'])
     //   template: window.localStorage.getItem('USER_comics')
     // });
 
-    // $undoPopup.show({title: "Comics delted"}).then(function(res) {
+    // $undoPopup.show({title: "Comics delted", timeout: "long"}).then(function(res) {
     //   console.log(res)
     // });
 
-    $ionicPopover.fromTemplate('<ion-popover-view><ion-header-bar><h1 class="title">My Popover Title</h1></ion-header-bar><ion-content>content</ion-content></ion-popover-view>', { scope: $scope }).show($event);
+    $toast.show("This week");
 
+    //$ionicPopover.fromTemplate('<ion-popover-view><ion-header-bar><h1 class="title">My Popover Title</h1></ion-header-bar><ion-content>content</ion-content></ion-popover-view>', { scope: $scope }).show($event);
+    try {
+      // ComicsReader.backupDataToFile().then(function(result) {
+      //     console.log("bck res " + result);
+      //     $scope.testresult = result;
+      // }, function(err) {
+      //     console.log("bck err " + err);
+      //     $scope.testresult = err;
+      // });
+
+      // ComicsReader.getLastBackup().then(function(result) {
+      //     console.log("bck res " + result);
+      //     $scope.testresult = result;
+      // }, function(err) {
+      //     console.log("bck err " + err);
+      //     $scope.testresult = err;
+      // });
+
+      //$cordovaToast.showShortBottom("test me");
+
+    } catch (e) {
+      console.log("TEST ERR" + e);
+    }
   };
 })
 ;

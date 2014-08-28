@@ -1,4 +1,4 @@
-<div class="best-release" ng-show="best.number">
+<div class="best-release" ng-show="best.number" ng-class="{expired: expired}">
 	<div class="number">{{best.number}}</div>
 	<div class="date" ng-show="best.date">{{best.date | date: 'dd MMM'}}</div>
 	<div class="date" ng-show="!best.date">&nbsp;</div>

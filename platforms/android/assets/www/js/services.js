@@ -69,10 +69,16 @@ var PERIODICITIES = {
 
 angular.module('starter.services', [])
 
-.factory('ComicsReader', function ($filter) {
+.factory('ComicsReader', function ($q, $filter, $cordovaDevice, $cordovaFile) {
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
 	var lastRemoved = null;
+	var backupFileName = "backup.json";
+	//var dataStorageFolder;
+	// switch ($cordovaDevice.getPlatform()) {
+	// 	case "Android": dataStorageFolder = cordova.file.externalDataDirectory; break;
+	// 	case "iOS": dataStorageFolder = cordova.file.syncedDataDirectory; break;
+	// }
 
 	//localstorage DB
 	var DB = {
@@ -193,6 +199,49 @@ angular.module('starter.services', [])
 						function(key) { delete this.comics[ii][key]; }, this)
 				}
 			}
+		},
+		//
+		getLastBackup: function() {
+			////TODO solo per android
+			//var backupFilePath = cordova.file.externalDataDirectory + backupFileName;
+
+			// console.log("start writing file " + backupFileName);
+
+			// var q = $q.defer();
+		 //  $cordovaFile.readFileMetadata(backupFileName).then(function(result) {
+		 //  	//console.log("res " + result.lastModifiedDate);
+		 //  	q.resolve(result.lastModifiedDate);
+		 //  }, function(err) {
+			// 	//console.log("err keys " + _.keys(err));
+			// 	q.reject(err.code);
+		 //  });
+
+		 // return q.promise;
+		},
+		//
+		backupDataToFile: function() {
+			////TODO solo per android
+			//var backupFilePath = cordova.file.externalDataDirectory + backupFileName;
+			//fs root -> file:///storage/sdcard0
+
+			// console.log("start writing file " + backupFileName);
+
+			// var q = $q.defer();
+		 //  $cordovaFile.writeFile(backupFileName, JSON.stringify(this.comics)).then(function(result) {
+		 //  	console.log("ww res keys " + _.keys(result));
+		 //  	console.log("ww res " + result);
+		 //  	q.resolve(result);
+		 //  }, function(err) {
+			// 	console.log("ww err keys " + _.keys(err));
+			// 	console.log("ww err code " + err.code);
+			// 	q.reject(err.code);
+		 //  });
+
+		 // return q.promise;
+		},
+		//
+		restoreDataFromFile: function() {
+			//backupFilePath
 		}
 	};
 
