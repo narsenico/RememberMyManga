@@ -1,60 +1,68 @@
-String.prototype.hashCode = function(){
-    var hash = 0;
-    if (this.length == 0) return hash;
-    for (var i = 0; i < this.length; i++) {
-        var character = this.charCodeAt(i);
-        hash = ((hash<<5)-hash)+character;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
-}
+// String.prototype.hashCode = function(){
+//     var hash = 0;
+//     if (this.length == 0) return hash;
+//     for (var i = 0; i < this.length; i++) {
+//         var character = this.charCodeAt(i);
+//         hash = ((hash<<5)-hash)+character;
+//         hash = hash & hash; // Convert to 32bit integer
+//     }
+//     return hash;
+// }
 
-Array.prototype.indexByKey = function(value, property) {
-	for (var ii=0; ii<this.length; ii++) {
-		if (this[ii][property] == value)
+// Array.prototype.indexByKey = function(value, property) {
+// 	for (var ii=0; ii<this.length; ii++) {
+// 		if (this[ii][property] == value)
+// 			return ii;
+// 	}
+// 	return -1;
+// }
+
+function indexByKey(arr, value, property) {
+	for (var ii=0; ii<arr.length; ii++) {
+		if (arr[ii][property] == value)
 			return ii;
 	}
 	return -1;
 }
 
-function ComicsEntry(opts) {
-	this.id = null;
-	this.name = null;
-	this.series = null;
-	this.publisher = null;
-	this.authors = null;
-	this.price = 0.0;
-	this.periodicity = null;
-	this.reserved = "F";
-	this.notes = null;
-	this.releases = [];
-	this.lastUpdate = new Date().getTime();
+// function ComicsEntry(opts) {
+// 	this.id = null;
+// 	this.name = null;
+// 	this.series = null;
+// 	this.publisher = null;
+// 	this.authors = null;
+// 	this.price = 0.0;
+// 	this.periodicity = null;
+// 	this.reserved = "F";
+// 	this.notes = null;
+// 	this.releases = [];
+// 	this.lastUpdate = new Date().getTime();
 
-	if (opts && !opts.id && opts.name) {
-		opts.id = opts.name.hashCode().toString();
-	}
+// 	if (opts && !opts.id && opts.name) {
+// 		opts.id = opts.name.hashCode().toString();
+// 	}
 
-	angular.extend(this, opts);
-}
+// 	angular.extend(this, opts);
+// }
 
-ComicsEntry.new = function() {
-	return new ComicsEntry( { id: "new" } );
-}
+// ComicsEntry.new = function() {
+// 	return new ComicsEntry( { id: "new" } );
+// }
 
-function ComicsRelease(opts) {
-	this.comicsId = null;
-	this.number = null;
-	this.date = null;
-	this.price = null;
-	this.reminder = null;
-	this.purchased = "F";
+// function ComicsRelease(opts) {
+// 	this.comicsId = null;
+// 	this.number = null;
+// 	this.date = null;
+// 	this.price = null;
+// 	this.reminder = null;
+// 	this.purchased = "F";
 
-	angular.extend(this, opts);
-}
+// 	angular.extend(this, opts);
+// }
 
-ComicsRelease.new = function(comicsId) {
-	return new ComicsRelease( { comicsId: comicsId } );
-}
+// ComicsRelease.new = function(comicsId) {
+// 	return new ComicsRelease( { comicsId: comicsId } );
+// }
 
 //TODO rivedere l'inglese
 var PERIODICITIES = {
@@ -79,6 +87,29 @@ angular.module('starter.services', [])
 	// 	case "Android": dataStorageFolder = cordova.file.externalDataDirectory; break;
 	// 	case "iOS": dataStorageFolder = cordova.file.syncedDataDirectory; break;
 	// }
+
+	var comicsDefaults = {
+		id: null,
+		name: null,
+		series: null,
+		publisher: null,
+		authors: null,
+		price: 0.0,
+		periodicity: null,
+		reserved: "F",
+		notes: null,
+		releases: [],
+		lastUpdate: new Date().getTime()
+	}
+
+	var releaseDefaults = {
+		comicsId: null,
+		number: null,
+		date: null,
+		price: null,
+		reminder: null,
+		purchased: "F"
+	}
 
 	//localstorage DB
 	var DB = {
@@ -110,24 +141,24 @@ angular.module('starter.services', [])
 		getComicsById: function(id) {
 			//console.log("getComicsById", id)
 			if (id == "new") {
-				return ComicsEntry.new();
+				return this.newComics({id: 'new'});
 			} else {
-				return _.findWhere(this.comics, { id: id }) || new ComicsEntry();
+				return _.findWhere(this.comics, { id: id }) || this.newComics();
 			}
 		},
 		//
 		getReleaseById: function(item, id) {
 	  	if (id == "new") {
-	  		return ComicsRelease.new(item.id);
+	  		return this.newRelease({ comicsId: item.id });
 	  	} else {
-	  		console.log("getReleaseById", item.releases, id, _.findWhere(item.releases, { number: id }))
-	  		return _.findWhere(item.releases, { number: parseInt(id) }) || ComicsRelease.new(item.id);
+	  		//console.log("getReleaseById", item.releases, id, _.findWhere(item.releases, { number: id }))
+	  		return _.findWhere(item.releases, { number: parseInt(id) }) || this.newRelease({ comicsId: item.id });
 		  }
 		},
 		//
 		updateRelease: function(item, release) {
 			//console.log("updateRelease", item.id, release.number);
-			var idx = item.releases.indexByKey(release.number, 'number');
+			var idx = indexByKey(item.releases, release.number, 'number');
 			if (idx == -1) {
 				item.releases.push(release);
 			}
@@ -136,7 +167,7 @@ angular.module('starter.services', [])
 		},
 		//
 		removeRelease: function(item, release) {
-			var idx = item.releases.indexByKey(release.number, 'number');
+			var idx = indexByKey(item.releases, release.number, 'number');
 			if (idx > -1) {
 				item.releases.splice(idx, 1);
 			}
@@ -155,14 +186,14 @@ angular.module('starter.services', [])
 				return _.find(sorted, function(rel) { /*console.log(item.name, rel.date, rel.purchased);*/ return rel.date < today && rel.purchased != 'T'; }) || 
 					_.find(sorted, function(rel) { return rel.date >= today && rel.purchased != 'T'; }) ||
 					_.find(sorted, function(rel) { return !rel.date && rel.purchased != 'T'; }) ||
-					new ComicsRelease();
+					this.newRelease();
 			} else
-				return new ComicsRelease();
+				return this.newRelease();
 		},
 		//
 		update: function(item) {
 			if (item.id == "new") {
-				item.id = item.name.hashCode().toString();
+				item.id = UUID.genV1().toString();
 				this.comics.push(item);
 			}
 			//aggiorno ultima modifica
@@ -171,7 +202,7 @@ angular.module('starter.services', [])
 		//
 		remove: function(item) {
 			var id = item.id;
-			var idx = this.comics.indexByKey(item.id, 'id');
+			var idx = indexByKey(this.comics, item.id, 'id');
 			if (idx > -1) {
 				lastRemoved = [idx, this.comics[idx]];
 				this.comics.splice(idx, 1);
@@ -242,6 +273,14 @@ angular.module('starter.services', [])
 		//
 		restoreDataFromFile: function() {
 			//backupFilePath
+		},
+		//
+		newComics: function(opts) {
+			return angular.extend(angular.copy(comicsDefaults), opts);
+		},
+		//
+		newRelease: function(opts) {
+			return angular.extend(angular.copy(releaseDefaults), opts);
 		}
 	};
 

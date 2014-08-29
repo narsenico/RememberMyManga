@@ -169,6 +169,8 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.removeRelease = function(rel) {
     ComicsReader.removeRelease(rel.entry, rel.release);
     ComicsReader.save();
+    //console.log("remove ", rel.index, $scope.releases)
+    $scope.releases.splice(rel.index, 1);
   };
   //
   $scope.setPurchased = function(rel, value) {
@@ -218,7 +220,7 @@ angular.module('starter.controllers', ['starter.services'])
         if ($scope.purchasedVisible || v.purchased != 'T') {
           if (!dtFrom || !v.date || v.date >= dtFrom) {
             if (!dtTo || !v.date || v.date <= dtTo) {
-              $scope.releases.push( { entry: arr[ii], release: v } );
+              $scope.releases.push( { entry: arr[ii], release: v, index: k } );
             }
           }
         }
@@ -332,10 +334,10 @@ angular.module('starter.controllers', ['starter.services'])
   };
   //
   $scope.fakeEntries = function() {
-    ComicsReader.update( new ComicsEntry( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
-    ComicsReader.update( new ComicsEntry( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
-    ComicsReader.update( new ComicsEntry( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
-    ComicsReader.update( new ComicsEntry( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
+    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
+    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
+    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
+    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
     ComicsReader.save();
   };
 
