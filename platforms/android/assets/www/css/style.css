@@ -22,6 +22,13 @@
 	background-color: #F0E3C2;
 }
 
+.bar .button.button-icon.rmm-search-button {
+	right: 5px;
+}
+.bar .button.button-icon.rmm-search-button:before {
+	font-size: 20px;
+}
+
 /* compatibilità pulsante a destra con pulsanti opzioni item */
 .rmm-button-right > .button,
 .rmm-button-right .item-content > .button {
@@ -170,7 +177,7 @@
 }
 
 .item-comics .item-content > div {
-	padding-right: 20px;
+	padding-right: 25px;
 }
 
 .item-comics .comics-title {
@@ -179,6 +186,9 @@
 	font-weight: normal;
 	color: #444;
 	margin-bottom: 2px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .item-comics .comics-subtitle {
@@ -186,6 +196,9 @@
 	font-size: 0.7em;
 	font-weight: normal;
 	color: #444;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .item-comics .comics-notes {
@@ -193,6 +206,9 @@
 	font-size: 0.7em;
 	font-weight: normal;
 	color: #B7B7B7;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .item-comics .comics-icon {

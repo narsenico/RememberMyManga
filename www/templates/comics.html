@@ -11,7 +11,7 @@
       <input type="search" placeholder="Filter comics..." ng-model="search" ng-change="scrollTop()">
     </label>
     <button ng-if="search.length"
-      class="button button-icon ion-android-close clear-button"
+      class="button button-icon ion-android-close clear-button rmm-search-button"
       ng-click="clearSearch()">
     </button>
   </ion-header-bar>
@@ -20,7 +20,7 @@
       <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" ng-repeat="item in getComics() | orderBy:'lastUpdate':true" href="#/app/releases/{{item.id}}">
 
         <div>
-          <span class="comics-title">{{item.name}} <i class="icon ion-ios7-filing-outline" ng-show="item.reserved=='T'"></i></span>
+          <span class="comics-title"><i class="icon ion-ios7-filing-outline" ng-show="item.reserved=='T'"></i> {{item.name}}</span>
           <span class="comics-subtitle">{{item.publisher}}</span>
           <span class="comics-notes">{{getComicsInfo(item)}}</span>
           <span class="comics-notes" ng-show="debugMode">id {{item.id}} last upd {{item.lastUpdate}}</span>

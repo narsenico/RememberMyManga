@@ -119,40 +119,10 @@ angular.module('starter.controllers', ['starter.services'])
     $ionicNavBarDelegate.back();
   };
   $scope.isUnique = function(entry) {
-    //verifica se il nome sia unico?
-    //return !_.findWhere(ComicsReader.comics, { name: entry.name });
-    return true;
+    return ComicsReader.normalizeComicsName($scope.master.name) == ComicsReader.normalizeComicsName(entry.name) || 
+      ComicsReader.isComicsUnique(entry);
   };
   $scope.reset();
-})
-//TODO uso una direttiva per la validazione
-.directive('comicsUnique', function() {
-  return {
-    restrict: 'A',
-    require: 'ngModel',
-    link: function(scope, elem, attr, ngModel) {
-
-      function isUnique(value) {
-        //angular.forEach
-
-        //posso accedere al master e controllare l'id, se !new e == id master è ok 
-        // console.log(scope.master)
-
-        return true;        
-      }
-
-      ngModel.$parsers.unshift(function(value) {
-        ngModel.$setValidity('unique', isUnique(value));
-        return value;
-      });
-
-      ngModel.$formatters.unshift(function(value) {
-          ngModel.$setValidity('unique', isUnique(value));
-          return value;
-      });
-
-    }
-  };
 })
 
 .controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, $toast, ComicsReader, Settings) {
@@ -183,6 +153,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.changeFilter = function(purchasedVisible, period) {
     $scope.purchasedVisible = Settings.filters.releases.purchasedVisible = purchasedVisible;
     $scope.period = Settings.filters.releases.period = period;
+    $scope.filterInfo = "";
 
     var arr;
     if ($stateParams.comicsId == null) {
@@ -212,8 +183,10 @@ angular.module('starter.controllers', ['starter.services'])
       toastMsgEmpty = "No releases";
     }
 
+    var tot = 0;
     $scope.releases = [];
     for (var ii=0; ii<arr.length; ii++) {
+      tot += arr[ii].releases.length;
       angular.forEach(arr[ii].releases, function(v, k) {
         //console.log(arr[ii].name, v.date, dtFrom, dtTo)
 
@@ -226,6 +199,8 @@ angular.module('starter.controllers', ['starter.services'])
         }
       });
     }
+
+    $scope.filterInfo = $scope.releases.length + " / " + tot;
 
     if ($scope.releases.length > 0)
       $toast.show(toastMsg);
@@ -247,8 +222,10 @@ angular.module('starter.controllers', ['starter.services'])
 
   if (Settings.userOptions.autoFillReleaseNumber == 'T' && $scope.master.number == null) {
     var maxrel = _.max($scope.entry.releases, function(rel) { return rel.number; });
-    console.log(maxrel);
-    if (!_.isEmpty(maxrel) && maxrel.number > 0) {
+    //console.log(maxrel);
+    if (_.isEmpty(maxrel)) {
+      $scope.master.number = 1;
+    } else if (maxrel.number > 0) {
       $scope.master.number = maxrel.number + 1;
     }
   }

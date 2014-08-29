@@ -147,11 +147,19 @@ angular.module('starter.services', [])
 			}
 		},
 		//
+		isComicsUnique: function(item) {
+			var name = this.normalizeComicsName(item.name);
+			return _.find(this.comics, function(cc) { return this.normalizeComicsName(cc.name) == name; }, this) == undefined;
+		},
+		//
+		normalizeComicsName: function(name) {
+			return _.str.clean(name).toLowerCase();
+		},
+		//
 		getReleaseById: function(item, id) {
 	  	if (id == "new") {
 	  		return this.newRelease({ comicsId: item.id });
 	  	} else {
-	  		//console.log("getReleaseById", item.releases, id, _.findWhere(item.releases, { number: id }))
 	  		return _.findWhere(item.releases, { number: parseInt(id) }) || this.newRelease({ comicsId: item.id });
 		  }
 		},

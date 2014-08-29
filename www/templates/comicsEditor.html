@@ -1,10 +1,9 @@
 <ion-view title="{{entry.id == 'new' ? 'New comics entry': 'Edit comics entry'}}">
-  <ion-nav-buttons side="right">
-    <!-- <button class="button button-icon icon ion-android-close" ng-click="cancel()"></button> -->
-    <button class="button button-icon icon ion-android-checkmark" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)"></button>
-  </ion-nav-buttons>
   <ion-content class="has-header">
     <form name="form" novalidate class="validation-form">
+		  <ion-nav-buttons side="right">
+		    <button class="button button-icon icon ion-android-checkmark" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)"></button>
+		  </ion-nav-buttons>
 		  <label class="item item-input item-key">
 		  	<span class="input-label rmm-required icon ion-key"> Name</span>
 		    <input type="text" placeholder="comics title" ng-model="entry.name" required>
