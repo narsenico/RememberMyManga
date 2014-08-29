@@ -1,16 +1,15 @@
 <ion-view title="Edit comics release">
-  <ion-nav-buttons side="right">
-  	<!-- <button class="button button-icon icon ion-android-close" ng-click="cancel()"></button> -->
-    <button class="button button-icon icon ion-android-checkmark" ng-click="update(release)" ng-disabled="form.$invalid || !isUnique(release)"></button>
-  </ion-nav-buttons>
   <ion-header-bar class="bar-subheader">
   	<h1 class="title">{{entry.name}}</h1>
 	</ion-header-bar>
   <ion-content class="has-header">
     <form name="form" novalidate class="validation-form">
+		  <ion-nav-buttons side="right">
+		    <button class="button button-icon icon ion-android-checkmark" ng-click="update(release)" ng-disabled="form.$invalid || !isUnique(release)"></button>
+		  </ion-nav-buttons>
 		  <label class="item item-input item-key">
 		    <span class="input-label rmm-required icon ion-key"> Number</span>
-		    <input type="number" placeholder="release number" ng-model="release.number" required>
+		    <input type="number" placeholder="release number" ng-model="release.number" name="nNumber" min="1" required>
 		  </label>
 		  <label class="item item-input">
 		    <span class="input-label icon ion-ios7-calendar-outline"> Date</span>

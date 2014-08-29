@@ -155,6 +155,9 @@ angular.module('starter.services', [])
 	  		return _.findWhere(item.releases, { number: parseInt(id) }) || this.newRelease({ comicsId: item.id });
 		  }
 		},
+		isReleaseUnique: function(item, release) {
+			return _.find(item.releases, function(rel) { return rel.number == release.number; }) == undefined;
+		},
 		//
 		updateRelease: function(item, release) {
 			//console.log("updateRelease", item.id, release.number);
@@ -290,9 +293,10 @@ angular.module('starter.services', [])
 .factory('Settings', function () {
 
 	var def = {
-		debugMode: false,
-		comicsCompactMode: false,
-		comicsSearchPublisher: false
+		debugMode: 'F',
+		comicsCompactMode: 'F',
+		comicsSearchPublisher: 'F',
+		autoFillReleaseNumber: 'T'
 	};
 
 	var filters = {

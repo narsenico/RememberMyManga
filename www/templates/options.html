@@ -11,14 +11,14 @@
 	  		<ion-item class="item" ng-click="resetOptions()"><i class="icon ion-ios7-loop-strong"></i> Reset settings</ion-item>
 	  		<ion-item class="item" ng-click="backup()"><i class="icon ion-ios7-download-outline"></i> Backup data</ion-item>
 	  		<ion-item class="item" ng-click="restore()"><i class="icon ion-ios7-upload-outline"></i> Restore data</ion-item>
-	  		<div class="item item-divider" ng-show="userOptions.debugMode">Test</div>
-	  		<ion-item class="item" ng-click="fakeEntries()" ng-show="userOptions.debugMode"><i class="icon ion-arrow-graph-down-right"></i> Create fake entries</ion-item>
-	  		<ion-item class="item" ng-click="test($event)" ng-show="userOptions.debugMode"><i class="icon ion-arrow-graph-down-right"></i> Test {{testresult}}</ion-item>
+	  		<div class="item item-divider" ng-show="userOptions.debugMode=='T'">Test</div>
+	  		<ion-item class="item" ng-click="fakeEntries()" ng-show="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Create fake entries</ion-item>
+	  		<ion-item class="item" ng-click="test($event)" ng-show="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Test {{testresult}}</ion-item>
 			  <div class="item item-divider">Settings</div>
 			  <ion-item class="item item-toggle">
 					Debug mode
 					<label class="toggle">
-						<input type="checkbox" ng-model="userOptions.debugMode" ng-true-value="true" ng-false-value="false" ng-change="optionsChanged()">
+						<input type="checkbox" ng-model="userOptions.debugMode" ng-true-value="T" ng-false-value="F" ng-change="optionsChanged()">
 						<div class="track">
 						<div class="handle"></div>
 						</div>
@@ -27,7 +27,7 @@
 			  <ion-item class="item item-toggle">
 					Comics compact view
 					<label class="toggle">
-						<input type="checkbox" ng-model="userOptions.comicsCompactMode" ng-true-value="true" ng-false-value="false" ng-change="optionsChanged()">
+						<input type="checkbox" ng-model="userOptions.comicsCompactMode" ng-true-value="T" ng-false-value="F" ng-change="optionsChanged()">
 						<div class="track">
 						<div class="handle"></div>
 						</div>
@@ -36,7 +36,16 @@
 				<ion-item class="item item-toggle">
 					Search also in publisher
 					<label class="toggle">
-						<input type="checkbox" ng-model="userOptions.comicsSearchPublisher" ng-true-value="true" ng-false-value="false" ng-change="optionsChanged()">
+						<input type="checkbox" ng-model="userOptions.comicsSearchPublisher" ng-true-value="T" ng-false-value="F" ng-change="optionsChanged()">
+						<div class="track">
+						<div class="handle"></div>
+						</div>
+					</label>
+				</ion-item>
+				<ion-item class="item item-toggle">
+					Auto fill release number
+					<label class="toggle">
+						<input type="checkbox" ng-model="userOptions.autoFillReleaseNumber" ng-true-value="T" ng-false-value="F" ng-change="optionsChanged()">
 						<div class="track">
 						<div class="handle"></div>
 						</div>
