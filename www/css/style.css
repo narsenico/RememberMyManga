@@ -262,6 +262,7 @@
 	text-align: center;
 	line-height: 25px;
 	background-color: #66CC33;
+	border-radius: 2px 2px 0 0;
 }
 
 .best-release.expired .number {
@@ -277,6 +278,7 @@
 	border-left: solid 1px #ddd;
 	border-right: solid 1px #ddd;
 	border-bottom: solid 1px #ddd;
+	border-radius: 0 0 2px 2px;
 }
 
 /* Release */
