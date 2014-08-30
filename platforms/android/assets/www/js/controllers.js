@@ -125,7 +125,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.reset();
 })
 
-.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, $toast, ComicsReader, Settings) {
+.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, $toast, $undoPopup, $timeout, ComicsReader, Settings) {
   $scope.entry = null;
   $scope.releases = [];
   $scope.purchasedVisible = Settings.filters.releases.purchasedVisible;
@@ -141,6 +141,16 @@ angular.module('starter.controllers', ['starter.services'])
     ComicsReader.save();
     //console.log("remove ", rel.index, $scope.releases)
     $scope.releases.splice(rel.index, 1);
+
+    $timeout(function() {
+      $undoPopup.show({title: "Release removed", timeout: "long"}).then(function(res) {
+        if (res == 'ok') {
+          ComicsReader.undoRemoveRelease();
+          ComicsReader.save();
+          $scope.changeFilter($scope.purchasedVisible, $scope.period);
+        }
+      });
+    }, 250);
   };
   //
   $scope.setPurchased = function(rel, value) {

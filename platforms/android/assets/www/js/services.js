@@ -81,6 +81,7 @@ angular.module('starter.services', [])
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
 	var lastRemoved = null;
+	var lastRemovedRelease = null;
 	var backupFileName = "backup.json";
 	//var dataStorageFolder;
 	// switch ($cordovaDevice.getPlatform()) {
@@ -180,10 +181,18 @@ angular.module('starter.services', [])
 		removeRelease: function(item, release) {
 			var idx = indexByKey(item.releases, release.number, 'number');
 			if (idx > -1) {
+				lastRemovedRelease = [idx, item, release];
 				item.releases.splice(idx, 1);
 			}
 			//aggiorno ultima modifica
 			updated(item);
+		},
+		//
+		undoRemoveRelease: function() {
+			if (lastRemovedRelease) {
+				lastRemovedRelease[1].releases.splice(lastRemovedRelease[0], 0, lastRemovedRelease[2]);
+				lastRemovedRelease = null;
+			}
 		},
 		//
 		getBestRelease: function(item) {
@@ -221,9 +230,10 @@ angular.module('starter.services', [])
 		},
 		//
 		undoRemove: function() {
-			console.log("undo")
+			//console.log("undo")
 			if (lastRemoved) {
 				this.comics.splice(lastRemoved[0], 0, lastRemoved[1]);
+				lastRemoved = null;
 			}
 		},
 		//
