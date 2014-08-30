@@ -1,22 +1,3 @@
-// String.prototype.hashCode = function(){
-//     var hash = 0;
-//     if (this.length == 0) return hash;
-//     for (var i = 0; i < this.length; i++) {
-//         var character = this.charCodeAt(i);
-//         hash = ((hash<<5)-hash)+character;
-//         hash = hash & hash; // Convert to 32bit integer
-//     }
-//     return hash;
-// }
-
-// Array.prototype.indexByKey = function(value, property) {
-// 	for (var ii=0; ii<this.length; ii++) {
-// 		if (this[ii][property] == value)
-// 			return ii;
-// 	}
-// 	return -1;
-// }
-
 function indexByKey(arr, value, property) {
 	for (var ii=0; ii<arr.length; ii++) {
 		if (arr[ii][property] == value)
@@ -24,45 +5,6 @@ function indexByKey(arr, value, property) {
 	}
 	return -1;
 }
-
-// function ComicsEntry(opts) {
-// 	this.id = null;
-// 	this.name = null;
-// 	this.series = null;
-// 	this.publisher = null;
-// 	this.authors = null;
-// 	this.price = 0.0;
-// 	this.periodicity = null;
-// 	this.reserved = "F";
-// 	this.notes = null;
-// 	this.releases = [];
-// 	this.lastUpdate = new Date().getTime();
-
-// 	if (opts && !opts.id && opts.name) {
-// 		opts.id = opts.name.hashCode().toString();
-// 	}
-
-// 	angular.extend(this, opts);
-// }
-
-// ComicsEntry.new = function() {
-// 	return new ComicsEntry( { id: "new" } );
-// }
-
-// function ComicsRelease(opts) {
-// 	this.comicsId = null;
-// 	this.number = null;
-// 	this.date = null;
-// 	this.price = null;
-// 	this.reminder = null;
-// 	this.purchased = "F";
-
-// 	angular.extend(this, opts);
-// }
-
-// ComicsRelease.new = function(comicsId) {
-// 	return new ComicsRelease( { comicsId: comicsId } );
-// }
 
 //TODO rivedere l'inglese
 var PERIODICITIES = {
@@ -77,17 +19,11 @@ var PERIODICITIES = {
 
 angular.module('starter.services', [])
 
-.factory('ComicsReader', function ($q, $filter, $cordovaDevice, $cordovaFile) {
+.factory('ComicsReader', function ($q, $filter, $cordovaDevice, $cordovaFile, $cordovaLocalNotification) {
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
 	var lastRemoved = null;
 	var lastRemovedRelease = null;
-	var backupFileName = "backup.json";
-	//var dataStorageFolder;
-	// switch ($cordovaDevice.getPlatform()) {
-	// 	case "Android": dataStorageFolder = cordova.file.externalDataDirectory; break;
-	// 	case "iOS": dataStorageFolder = cordova.file.syncedDataDirectory; break;
-	// }
 
 	var comicsDefaults = {
 		id: null,
@@ -108,7 +44,7 @@ angular.module('starter.services', [])
 		number: null,
 		date: null,
 		price: null,
-		reminder: null,
+		reminder: null, //null, 1
 		purchased: "F"
 	}
 
@@ -254,46 +190,12 @@ angular.module('starter.services', [])
 		},
 		//
 		getLastBackup: function() {
-			////TODO solo per android
-			//var backupFilePath = cordova.file.externalDataDirectory + backupFileName;
-
-			// console.log("start writing file " + backupFileName);
-
-			// var q = $q.defer();
-		 //  $cordovaFile.readFileMetadata(backupFileName).then(function(result) {
-		 //  	//console.log("res " + result.lastModifiedDate);
-		 //  	q.resolve(result.lastModifiedDate);
-		 //  }, function(err) {
-			// 	//console.log("err keys " + _.keys(err));
-			// 	q.reject(err.code);
-		 //  });
-
-		 // return q.promise;
 		},
 		//
 		backupDataToFile: function() {
-			////TODO solo per android
-			//var backupFilePath = cordova.file.externalDataDirectory + backupFileName;
-			//fs root -> file:///storage/sdcard0
-
-			// console.log("start writing file " + backupFileName);
-
-			// var q = $q.defer();
-		 //  $cordovaFile.writeFile(backupFileName, JSON.stringify(this.comics)).then(function(result) {
-		 //  	console.log("ww res keys " + _.keys(result));
-		 //  	console.log("ww res " + result);
-		 //  	q.resolve(result);
-		 //  }, function(err) {
-			// 	console.log("ww err keys " + _.keys(err));
-			// 	console.log("ww err code " + err.code);
-			// 	q.reject(err.code);
-		 //  });
-
-		 // return q.promise;
 		},
 		//
 		restoreDataFromFile: function() {
-			//backupFilePath
 		},
 		//
 		newComics: function(opts) {
@@ -302,7 +204,55 @@ angular.module('starter.services', [])
 		//
 		newRelease: function(opts) {
 			return angular.extend(angular.copy(releaseDefaults), opts);
-		}
+		},
+		//
+		countReleases: function(date) {
+			var count = 0;
+			angular.forEach(this.comics, function(item) {
+				angular.forEach(item.releases, function(rel) {
+					if (rel.reminder && rel.date == date) count++;
+				});
+			});
+			return count;
+		},
+		//
+		addNotification: function(date) {
+			$cordovaLocalNotification.isScheduled(date, this).then(function(scheduled) {
+				var badge = 1;
+				if (scheduled) {
+					badge = this.countReleases(date);
+				}
+				//TODO alre proprietà impostare defaults in deviceready
+				//TODO ora da settings
+				var dd = new Date(Date.parse(date + " 06:00:00"));
+				$cordovaLocalNotification.add({ id: date, date: dd, title: "Comikku", message: "Seams to be some releases today", badge: badge })
+				.then(function(result) {
+					console.log("add notification " + dd + " " + badge);
+				});
+			});
+		},
+		//
+		removeNotification: function(date) {
+			$cordovaLocalNotification.isScheduled(date, this).then(function(scheduled) {
+				if (scheduled) {
+					var badge = this.countReleases(date);
+					if (badge == 0) {
+						$cordovaLocalNotification.cancel(date)
+						.then(function(result) {
+							console.log("cancel notification " + dd);
+						});		
+					} else {
+						//TODO alre proprietà impostare defaults in deviceready
+						//TODO ora da settings
+						var dd = new Date(Date.parse(date + " 06:00:00"));
+						$cordovaLocalNotification.add({ id: date, date: dd, title: "Comikku", message: "Seams to be some releases today", badge: badge })
+						.then(function(result) {
+							console.log("add notification " + dd + " " + badge);
+						});
+					}
+				}
+			});
+		}		
 	};
 
   return DB;
@@ -314,7 +264,9 @@ angular.module('starter.services', [])
 		debugMode: 'F',
 		comicsCompactMode: 'F',
 		comicsSearchPublisher: 'F',
-		autoFillReleaseNumber: 'T'
+		autoFillReleaseNumber: 'T',
+		comicsOrderBy: 'lastUpdate',
+		comicsOrderByDesc: 'T'
 	};
 
 	var filters = {

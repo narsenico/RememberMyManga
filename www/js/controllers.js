@@ -21,6 +21,8 @@ angular.module('starter.controllers', ['starter.services'])
 
 .controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, $undoPopup, ComicsReader, Settings) {
   $scope.debugMode = Settings.userOptions.debugMode == 'T';
+  $scope.orderByField = Settings.userOptions.lastUpdate;
+  $scope.orderByDesc = Settings.userOptions.comicsOrderByDesc == 'T';
   //rendo disponibile l'elenco allo scope
   $scope.comics = ComicsReader.comics;
   //filtro i fumetti in base a $scope.search
@@ -210,7 +212,7 @@ angular.module('starter.controllers', ['starter.services'])
       });
     }
 
-    $scope.filterInfo = $scope.releases.length + " / " + tot;
+    $scope.filterInfo = _.str.sprintf("%s results out of %s", $scope.releases.length, tot);
 
     if ($scope.releases.length > 0)
       $toast.show(toastMsg);
@@ -266,7 +268,8 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.reset();
 })
 
-.controller('OptionsCtrl', function($scope, $ionicPopup, $undoPopup, $toast, $ionicPopover, $cordovaDevice, $cordovaFile, $cordovaToast, ComicsReader, Settings) {
+.controller('OptionsCtrl', function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $cordovaDevice, 
+  $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, ComicsReader, Settings) {
   //
   $scope.version = "?";
   //
@@ -351,7 +354,7 @@ angular.module('starter.controllers', ['starter.services'])
     //   console.log(res)
     // });
 
-    $toast.show("This week");
+    //$toast.show("This week");
 
     //$ionicPopover.fromTemplate('<ion-popover-view><ion-header-bar><h1 class="title">My Popover Title</h1></ion-header-bar><ion-content>content</ion-content></ion-popover-view>', { scope: $scope }).show($event);
     try {
@@ -372,6 +375,17 @@ angular.module('starter.controllers', ['starter.services'])
       // });
 
       //$cordovaToast.showShortBottom("test me");
+
+      // $file.readFileMetaData(cordova.file.externalDataDirectory + "_backup.json").then(
+      //   function(metaData) {
+      //     console.log("rmd ok " + metadata.modificationTime); //2014-08-30T13:46:30.000Z
+      //   },
+      //   function(error) {
+      //     console.log("rmd err" + error.code);
+      //   }
+      // );
+
+      ComicsReader.addNotification("2014-08-30");
 
     } catch (e) {
       console.log("TEST ERR" + e);

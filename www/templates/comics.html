@@ -17,7 +17,7 @@
   </ion-header-bar>
   <ion-content class="has-header" has-bouncing="true">
     <ion-list can-swipe="true">
-      <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" ng-repeat="item in getComics() | orderBy:'lastUpdate':true" href="#/app/releases/{{item.id}}">
+      <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" ng-repeat="item in getComics() | orderBy:orderByField:orderByDesc" href="#/app/releases/{{item.id}}">
 
         <div>
           <span class="comics-title"><i class="icon ion-ios7-filing-outline" ng-show="item.reserved=='T'"></i> {{item.name}}</span>

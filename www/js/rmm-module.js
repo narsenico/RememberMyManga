@@ -4,6 +4,7 @@
  *   promise return: 'ok', 'timeout', 'discarded'
  * - $toast: simple toast
  * - $datex: date munipulation utilities
+ * - $file: cordova file utilities
  */
 
 var IonicModule = angular.module('rmm', ['ngAnimate', 'ngSanitize', 'ui.router']),
@@ -23,7 +24,9 @@ var TOAST_TPL =
   '<div class="toast-container" ng-class="position">' +
     '<span ng-bind-html="text"></span>'
   '</div>';
+
 /*
+$undoPopup
 TODO: 
 - se già aperto chiuderlo con resolve false -> OK
 - posizionare al centro orizzontalmente (calcolare width?) -> per ora risolvo con margin-left: -125px;
@@ -301,7 +304,86 @@ IonicModule
     lastDayOfMonth: function(date) {
       if (!date) date = new Date();
       return new Date(date.getFullYear(), date.getMonth()+1, 0);
+    },
+    fromNow: function(milliseconds) {
+      return new Date(Date.now() + milliseconds);
     }
   };
   return $datex;
 }); //end $datex
+
+IonicModule
+.factory('$file', ['$q' ,function($q) {
+
+  return {
+    //
+    readFileAsText: function(filePath) {
+
+    },
+    //
+    readFileMetaData: function(filePath) {
+      console.log("readFileMetaData " + filePath);
+
+      var q = $q.defer();
+      getFileEntry(filePath).then(function(fileEntry) {
+        fileEntry.getMetadata(function(metaData) {
+          q.resolve(metaData);
+        },
+        function(error) {
+          q.reject(error);
+        });
+      })
+      return q.promise;
+    },
+    //
+    writeFile: function(filePath, content) {
+      console.log("writeFile " + filePath);
+
+      var q = $q.defer();
+      getFileEntry(filePath).then(function(fileEntry) {
+        fileEntry.createWriter(function(writer) {
+          writer.onwriteend = function(evt) {
+            //TODO
+          };
+          writer.write(content);
+        },
+        function(error) {
+          q.reject(error);
+        });
+      })
+      return q.promise;
+    }
+  };
+
+  function getFileEntry(filePath) {
+    console.log("getFileEntry " + filePath);
+
+    //if device.platform.toLowerCase() == "android"
+    //  append "Android/data/it.amonshore.rmm/files"
+    //bho! è veramente una stronzata!
+
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
+      function(fs) {
+        console.log("fs " + JSON.stringify(fs));
+        console.log("fsroot " + JSON.stringify(fs.root));
+      }, 
+      function(error) {
+        console.log("fs " + error.code);
+      }
+    );
+
+    var q = $q.defer();
+    window.resolveLocalFileSystemURL(filePath, 
+      function(fileEntry) {
+        console.log("resolved");
+        q.resolve(fileEntry);
+      },
+      function(error) {
+        console.log("not resolved");
+        q.reject(error);
+      }
+    );
+    return q.promise;
+  }
+
+}]); //end $file
