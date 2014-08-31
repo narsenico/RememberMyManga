@@ -1,8 +1,9 @@
 angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, Settings, ComicsReader) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $datex, Settings, ComicsReader) {
   //
   Settings.load();
+  $datex.weekStartMonday = Settings.userOptions.weekStartMonday == 'T';
   //leggo l'elenco dei fumetti (per utente USER)
   ComicsReader.read("USER");
 })
@@ -283,15 +284,16 @@ angular.module('starter.controllers', ['starter.services'])
   }
   //
   $scope.userOptions = Settings.userOptions;
-  console.log($scope.userOptions)
+  //console.log($scope.userOptions)
   $scope.optionsChanged = function() {
+    $datex.weekStartMonday = $scope.userOptions.weekStartMonday == 'T';
     Settings.save();    
   };
   //
   $scope.resetOptions = function() {
     $ionicPopup.confirm({
       title: 'Confirm',
-      template: 'Reset to default options?'
+      template: 'Reset to default settings?'
     }).then(function(res) {
       if (res) {
         Settings.loadDefault();
@@ -314,12 +316,16 @@ angular.module('starter.controllers', ['starter.services'])
   };
   //
   $scope.repairData = function() {
-    ComicsReader.repairData();
-    ComicsReader.save();
-    ComicsReader.read(ComicsReader.uid, true);
-    $ionicPopup.alert({
-      template: 'Data repaired'
-    })
+    $ionicPopup.confirm({
+      title: 'Confirm',
+      template: 'Repair data?'
+    }).then(function(res) {
+      if (res) {
+        ComicsReader.repairData();
+        ComicsReader.save();
+        ComicsReader.read(ComicsReader.uid, true);
+      }
+    });
   };
   //
   $scope.backup = function() {

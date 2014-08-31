@@ -289,13 +289,23 @@ function($ionicTemplateLoader, $q, $timeout, $document) {
 IonicModule
 .factory('$datex', function() {
   var $datex = {
+    weekStartMonday: false,
+    getDay: function(date) {
+      var day = date.getDay();
+      if (this.weekStartMonday) {
+        if (day == 0) return 6;
+        else return day-1;
+      } else {
+        return day;
+      }
+    },
     firstDayOfWeek: function(date) {
       if (!date) date = new Date();
-      return new Date(date).setDate(date.getDate() - date.getDay());
+      return new Date(date).setDate(date.getDate() - this.getDay(date));
     },
     lastDayOfWeek: function(date) {
       if (!date) date = new Date();
-      return new Date(date).setDate(date.getDate() - date.getDay() + 6);
+      return new Date(date).setDate(date.getDate() - this.getDay(date) + 6);
     },
     firstDayOfMonth: function(date) {
       if (!date) date = new Date();

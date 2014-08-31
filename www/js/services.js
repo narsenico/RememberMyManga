@@ -266,7 +266,8 @@ angular.module('starter.services', [])
 		comicsSearchPublisher: 'F',
 		autoFillReleaseNumber: 'T',
 		comicsOrderBy: 'lastUpdate',
-		comicsOrderByDesc: 'T'
+		comicsOrderByDesc: 'T',
+		weekStartMonday: 'F'
 	};
 
 	var filters = {
