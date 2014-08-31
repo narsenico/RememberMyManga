@@ -29,10 +29,11 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.getComics = function() {
     return $scope.comics.filter(function(item) {
       //tolgo spazi superflui con _.str.clean
+      var bOk = false;
       if (Settings.userOptions.comicsSearchPublisher == 'T') {
-        return !$scope.search ||  _.str.include(_.str.clean(item.publisher).toLowerCase(), _.str.clean($scope.search).toLowerCase());   
+        bOk = !$scope.search ||  _.str.include(_.str.clean(item.publisher).toLowerCase(), _.str.clean($scope.search).toLowerCase());   
       }
-      return !$scope.search ||  _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()); 
+      return bOk || (!$scope.search ||  _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()));
     });
   };
   //pulisco filtro

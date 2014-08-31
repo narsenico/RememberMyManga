@@ -227,7 +227,7 @@ angular.module('starter.services', [])
 				var dd = new Date(Date.parse(date + " 06:00:00"));
 				$cordovaLocalNotification.add({ id: date, date: dd, title: "Comikku", message: "Seams to be some releases today", badge: badge })
 				.then(function(result) {
-					console.log("add notification " + dd + " " + count);
+					console.log("add notification " + dd + " " + badge);
 				});
 			});
 		},
@@ -247,7 +247,7 @@ angular.module('starter.services', [])
 						var dd = new Date(Date.parse(date + " 06:00:00"));
 						$cordovaLocalNotification.add({ id: date, date: dd, title: "Comikku", message: "Seams to be some releases today", badge: badge })
 						.then(function(result) {
-							console.log("add notification " + dd + " " + count);
+							console.log("add notification " + dd + " " + badge);
 						});
 					}
 				}
