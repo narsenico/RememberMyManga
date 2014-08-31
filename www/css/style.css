@@ -174,6 +174,7 @@
 /* Comics */
 .item-comics .item-content {
 	min-height: 64px;
+	padding: 8px 49px 8px 16px;
 }
 
 .item-comics .item-content > div {
@@ -182,7 +183,7 @@
 
 .item-comics .comics-title {
 	display: block;
-	font-size: 1.3em;
+	font-size: 1.1em;
 	font-weight: normal;
 	color: #444;
 	margin-bottom: 2px;
@@ -193,7 +194,7 @@
 
 .item-comics .comics-subtitle {
 	display: block;
-	font-size: 0.7em;
+	font-size: 0.8em;
 	font-weight: normal;
 	color: #444;
 	overflow: hidden;
@@ -203,7 +204,7 @@
 
 .item-comics .comics-notes {
 	display: block;
-	font-size: 0.7em;
+	font-size: 0.8em;
 	font-weight: normal;
 	color: #B7B7B7;
 	overflow: hidden;
@@ -233,7 +234,7 @@
 .best-release {
 	position: absolute;
 	right: 16px;
-	top: 14px;
+	top: 9px;
 	/* bottom: 10px; */
 	min-width: 50px;
 	/*border: solid 1px #66CC33;*/
@@ -285,9 +286,9 @@
 .item-release { }
 
 .item-release .item-content {
-	padding-bottom: 4px;
+	padding: 8px 49px 8px 16px;
 }
 
 .item-release .item-content .button {
-	top: 20px;
+	top: 14px;
 }
