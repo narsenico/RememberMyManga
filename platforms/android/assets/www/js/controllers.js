@@ -219,10 +219,10 @@ angular.module('starter.controllers', ['starter.services'])
 
     $scope.filterInfo = _.str.sprintf("%s results out of %s", $scope.releases.length, tot);
 
-    if ($scope.releases.length > 0)
-      $toast.show(toastMsg);
-    else
-      $toast.show(toastMsgEmpty);
+    // if ($scope.releases.length > 0)
+    //   $toast.show(toastMsg);
+    // else
+    //   $toast.show(toastMsgEmpty);
   };
   //
   var today = $filter('date')(new Date(), 'yyyy-MM-dd');

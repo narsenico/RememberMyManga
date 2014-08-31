@@ -40,7 +40,8 @@ IonicModule
   '$q',
   '$timeout',
   '$document',
-function($ionicTemplateLoader, $q, $timeout, $document) {
+  '$ionicGesture',
+function($ionicTemplateLoader, $q, $timeout, $document, $ionicGesture) {
 	
   var previousUndo = null;
 	var $undoPopup = {
@@ -100,6 +101,9 @@ function($ionicTemplateLoader, $q, $timeout, $document) {
           self.element.addClass('undo-showing active');
           focusInput(self.element);
 
+          self.fnTouch = function(e) { if (e.target.parentNode != self.element[0]) responseDeferred.resolve('lostfocus'); };
+          self.gesture = $ionicGesture.on('touch', self.fnTouch, $document);
+
           if (options.timeout > 0) {
             self.timeoutPromise = $timeout(function() {
               responseDeferred.resolve('timeout');
@@ -123,6 +127,7 @@ function($ionicTemplateLoader, $q, $timeout, $document) {
           self.element.remove();
           self.scope.$destroy();
           if (self.timeoutPromise) $timeout.cancel(self.timeoutPromise);
+          $ionicGesture.off(self.gesture, 'touch', self.fnTouch);
         });
 
         self.removed = true;
