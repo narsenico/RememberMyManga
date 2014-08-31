@@ -22,13 +22,13 @@ angular.module('starter.controllers', ['starter.services'])
 
 .controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, $undoPopup, ComicsReader, Settings) {
   $scope.debugMode = Settings.userOptions.debugMode == 'T';
-  $scope.orderByField = Settings.userOptions.lastUpdate;
+  $scope.orderByField = Settings.userOptions.comicsOrderBy;
   $scope.orderByDesc = Settings.userOptions.comicsOrderByDesc == 'T';
   //rendo disponibile l'elenco allo scope
   $scope.comics = ComicsReader.comics;
   //filtro i fumetti in base a $scope.search
   $scope.getComics = function() {
-    return $scope.comics.filter(function(item) {
+    var arr = $scope.comics.filter(function(item) {
       //tolgo spazi superflui con _.str.clean
       var bOk = false;
       if (Settings.userOptions.comicsSearchPublisher == 'T') {
@@ -36,6 +36,9 @@ angular.module('starter.controllers', ['starter.services'])
       }
       return bOk || (!$scope.search ||  _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()));
     });
+    //aggiorno bestRelease per i comics filtrati
+    ComicsReader.refreshBestRelease(arr);
+    return arr;
   };
   //pulisco filtro
   $scope.clearSearch = function() {
@@ -77,10 +80,10 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.showAddRelease = function(item) {
     $location.path("/app/release/" + item.id + "/new").replace();
   };
-  //ritorna l'uscita più significativa da mostrare nell'item del fumetto
-  $scope.getBestRelease = function(item) {
-    return ComicsReader.getBestRelease(item);
-  };
+  // //ritorna l'uscita più significativa da mostrare nell'item del fumetto
+  // $scope.getBestRelease = function(item) {
+  //   return ComicsReader.getBestRelease(item);
+  // };
   //
   $scope.isMultiSelectionMode = false;
   //
@@ -96,7 +99,7 @@ angular.module('starter.controllers', ['starter.services'])
       comics: '='
     },
     controller: function($scope, $filter, ComicsReader) {
-      $scope.best = ComicsReader.getBestRelease($scope.comics);
+      $scope.best = $scope.comics.bestRelease; //ComicsReader.getBestRelease($scope.comics);
       var today = $filter('date')(new Date(), 'yyyy-MM-dd');
       $scope.expired = $scope.best.date && $scope.best.date < today;
     },

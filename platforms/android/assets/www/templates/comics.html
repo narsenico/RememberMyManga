@@ -23,7 +23,7 @@
           <span class="comics-title"><i class="icon ion-ios7-filing-outline" ng-show="item.reserved=='T'"></i> {{item.name}}</span>
           <span class="comics-subtitle">{{item.publisher}}</span>
           <span class="comics-notes">{{getComicsInfo(item)}}</span>
-          <span class="comics-notes" ng-show="debugMode">id {{item.id}} last upd {{item.lastUpdate}}</span>
+          <span class="comics-notes" ng-show="debugMode">id {{item.id}} last upd {{item.lastUpdate}} best {{item.bestRelease.date}}</span>
         </div>
 
         <best-release comics="item"></best-release>

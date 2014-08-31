@@ -19,7 +19,7 @@ var PERIODICITIES = {
 
 angular.module('starter.services', [])
 
-.factory('ComicsReader', function ($q, $filter, $cordovaDevice, $cordovaFile, $cordovaLocalNotification) {
+.factory('ComicsReader', function ($q, $filter, $datex, $cordovaDevice, $cordovaFile, $cordovaLocalNotification) {
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
 	var lastRemoved = null;
@@ -36,6 +36,7 @@ angular.module('starter.services', [])
 		reserved: "F",
 		notes: null,
 		releases: [],
+		bestRelease: null, // aggiornata da refreshBestRelease
 		lastUpdate: new Date().getTime()
 	}
 
@@ -142,9 +143,16 @@ angular.module('starter.services', [])
 				return _.find(sorted, function(rel) { /*console.log(item.name, rel.date, rel.purchased);*/ return rel.date < today && rel.purchased != 'T'; }) || 
 					_.find(sorted, function(rel) { return rel.date >= today && rel.purchased != 'T'; }) ||
 					_.find(sorted, function(rel) { return !rel.date && rel.purchased != 'T'; }) ||
-					this.newRelease();
+					this.newRelease({ date: $filter('date')( $datex.getMax(), 'yyyy-MM-dd' ) });
 			} else
-				return this.newRelease();
+				return this.newRelease({ date: $filter('date')( $datex.getMax(), 'yyyy-MM-dd' ) });
+		},
+		//
+		refreshBestRelease: function(items) {
+			items = items || this.comics;
+			angular.forEach(items, function(item) {
+				item.bestRelease = this.getBestRelease(item);
+			}, this);
 		},
 		//
 		update: function(item) {
@@ -265,8 +273,8 @@ angular.module('starter.services', [])
 		comicsCompactMode: 'F',
 		comicsSearchPublisher: 'F',
 		autoFillReleaseNumber: 'T',
-		comicsOrderBy: 'lastUpdate',
-		comicsOrderByDesc: 'T',
+		comicsOrderBy: 'bestRelease.date',
+		comicsOrderByDesc: 'F',
 		weekStartMonday: 'F'
 	};
 

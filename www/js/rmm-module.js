@@ -317,6 +317,9 @@ IonicModule
     },
     fromNow: function(milliseconds) {
       return new Date(Date.now() + milliseconds);
+    },
+    getMax: function() {
+      return new Date(9999, 11, 31);
     }
   };
   return $datex;
