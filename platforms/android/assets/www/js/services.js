@@ -19,7 +19,7 @@ var PERIODICITIES = {
 
 angular.module('starter.services', [])
 
-.factory('ComicsReader', function ($q, $filter, $datex, $cordovaDevice, $cordovaFile, $cordovaLocalNotification) {
+.factory('ComicsReader', function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification) {
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
 	var lastRemoved = null;
@@ -198,12 +198,31 @@ angular.module('starter.services', [])
 		},
 		//
 		getLastBackup: function() {
+			return $file.readFileMetadata("backup.json");
 		},
 		//
 		backupDataToFile: function() {
+			var dbkey = this.uid + "_comics";
+			var str = window.localStorage.getItem(dbkey);			
+			return $file.writeFile("backup.json", str);
 		},
 		//
 		restoreDataFromFile: function() {
+			var $this = this;
+			var q = $q.defer();
+			$file.readFileAsText("backup.json").then(function(result) {
+				try {
+					var obj = JSON.parse(result);
+					$this.comics = obj;
+					$this.save();
+					q.resolve(true);
+				} catch (e) {
+					q.reject({code: 'errparse'});
+				}
+			}, function(error) {
+				q.reject(error);
+			});
+			return q.promise;
 		},
 		//
 		newComics: function(opts) {

@@ -333,71 +333,100 @@ IonicModule
 IonicModule
 .factory('$file', ['$q' ,function($q) {
 
+  if (!window.cordova) return {};
+
   return {
     //
-    readFileAsText: function(filePath) {
-
-    },
-    //
-    readFileMetaData: function(filePath) {
-      console.log("readFileMetaData " + filePath);
+    readFileAsText: function(file) {
+      console.log("readFileAsText " + file);
 
       var q = $q.defer();
-      getFileEntry(filePath).then(function(fileEntry) {
-        fileEntry.getMetadata(function(metaData) {
-          q.resolve(metaData);
-        },
-        function(error) {
-          q.reject(error);
-        });
-      })
-      return q.promise;
-    },
-    //
-    writeFile: function(filePath, content) {
-      console.log("writeFile " + filePath);
+      getFileEntry(file).then(function(fileEntry) {
+        console.log("readFileAsText " + fileEntry);
 
-      var q = $q.defer();
-      getFileEntry(filePath).then(function(fileEntry) {
-        fileEntry.createWriter(function(writer) {
-          writer.onwriteend = function(evt) {
-            //TODO
+        fileEntry.file(function(file) {
+          var reader = new FileReader();
+          reader.onloadend = function(evt) {
+            q.resolve(this.result);
           };
-          writer.write(content);
+          reader.readAsText(file);
         },
         function(error) {
           q.reject(error);
         });
       })
       return q.promise;
-    }
+    },
+    //
+    readFileMetadata: function(file) {
+      console.log("readFileMetadata " + file);
+
+      var q = $q.defer();
+      getFileEntry(file).then(
+        function(fileEntry) {
+          console.log("fileEntry " + fileEntry);
+
+          fileEntry.file(function(file) {
+            q.resolve({ modificationTime: new Date(file.lastModified), size: file.size });
+          },
+          function(error) {
+            q.reject(error);
+          });
+        },
+        function(error) {
+          q.reject(error);
+        }
+      );
+      return q.promise;
+    },
+    //
+    writeFile: function(file, content) {
+      console.log("writeFile " + file);
+
+      var q = $q.defer();
+      getFileEntry(file, true).then(function(fileEntry) {
+        console.log("writeFile " + fileEntry);
+
+        fileEntry.createWriter(function(writer) {
+          writer.truncate(0);
+          writer.onwriteend = function(evt) {
+            writer.write(content);
+            writer.onwriteend = function(evt) {
+              q.resolve(writer.length);
+            };
+          };
+        }, 
+        function(error) {
+          q.reject(error);
+        });
+      })
+      return q.promise;
+    },
+    //
+    FileError: { NOT_FOUND_ERR: 1, SECURITY_ERR: 2, ABORT_ERR: 3, NOT_READABLE_ERR: 4, ENCODING_ERR: 5, NO_MODIFICATION_ALLOWED_ERR: 6, INVALID_STATE_ERR: 7, SYNTAX_ERR: 8, INVALID_MODIFICATION_ERR: 9, QUOTA_EXCEEDED_ERR: 10, TYPE_MISMATCH_ERR: 11, PATH_EXISTS_ERR: 12 }
   };
 
-  function getFileEntry(filePath) {
-    console.log("getFileEntry " + filePath);
+  function getFileEntry(file, create) {
+    //console.log("getFileEntry " + directory + file);
 
-    //if device.platform.toLowerCase() == "android"
-    //  append "Android/data/it.amonshore.rmm/files"
-    //bho! è veramente una stronzata!
-
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
-      function(fs) {
-        console.log("fs " + JSON.stringify(fs));
-        console.log("fsroot " + JSON.stringify(fs.root));
-      }, 
-      function(error) {
-        console.log("fs " + error.code);
-      }
-    );
+    var directory = cordova.file.externalDataDirectory;
+    if (false) { //if device.platform.toLowerCase() == "android"
+      directory += "Android/data/it.amonshore.rmm/files";
+    }
 
     var q = $q.defer();
-    window.resolveLocalFileSystemURL(filePath, 
-      function(fileEntry) {
-        console.log("resolved");
-        q.resolve(fileEntry);
+    window.resolveLocalFileSystemURL(directory, 
+      function(entry) {
+        entry.getFile(file, {create: create || false}, 
+          function(fileEntry) {
+            q.resolve(fileEntry);
+          },
+          function(error) {
+            q.reject(error);
+          }
+        );
       },
       function(error) {
-        console.log("not resolved");
         q.reject(error);
       }
     );

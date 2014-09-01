@@ -274,16 +274,15 @@ angular.module('starter.controllers', ['starter.services'])
 })
 
 .controller('OptionsCtrl', function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $cordovaDevice, 
-  $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, ComicsReader, Settings) {
+  $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, $timeout, $filter, ComicsReader, Settings) {
   //
-  $scope.version = "?";
+  $scope.version = null;
+  $scope.lastBackup = null;
   //
   if (window.cordova) {
     window.cordova.getAppVersion(function (version) {
       $scope.version = version;
     });
-  } else {
-    $scope.version = "unknown";
   }
   //
   $scope.userOptions = Settings.userOptions;
@@ -331,14 +330,49 @@ angular.module('starter.controllers', ['starter.services'])
     });
   };
   //
+  $scope.readLastBackup = function() {
+    if (window.cordova) {
+      ComicsReader.getLastBackup().then(function(result) {
+        $scope.lastBackup = $filter('date')(result.modificationTime, 'medium');
+      });
+    }
+  };
+  //
   $scope.backup = function() {
-    ComicsReader.backupDataToFile();
+    $ionicPopup.confirm({
+      title: 'Confirm',
+      template: 'Backup data? Previous backup will be overridden.'
+    }).then(function(res) {
+      if (res) {
+        ComicsReader.backupDataToFile().then(function(res) {
+          $scope.readLastBackup();
+          $toast.show("Backup complete");
+        }, function(error) {
+          $toast.show("Write error " + error.code);
+        });
+      }
+    });
   };
   //
   $scope.restore = function() {
-    ComicsReader.restoreDataFromFile();
-    ComicsReader.save();
+    $ionicPopup.confirm({
+      title: 'Confirm',
+      template: 'Restore data from backup? Current data will be overridden.'
+    }).then(function(res) {
+      if (res) {
+        ComicsReader.restoreDataFromFile().then(function(res) {
+          $toast.show("Restore complete");
+        }, function(error) {
+          $toast.show("Read error " + error.code);
+        });
+      }
+    });
   };
+  //
+  $scope.readLastBackup();
+
+
+  //DEBUG
   //
   $scope.fakeEntries = function() {
     ComicsReader.update( ComicsReader.newComics( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
@@ -347,7 +381,6 @@ angular.module('starter.controllers', ['starter.services'])
     ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
     ComicsReader.save();
   };
-
   //
   $scope.test = function($event) {
 
@@ -386,16 +419,38 @@ angular.module('starter.controllers', ['starter.services'])
 
       //$cordovaToast.showShortBottom("test me");
 
-      // $file.readFileMetaData(cordova.file.externalDataDirectory + "_backup.json").then(
-      //   function(metaData) {
-      //     console.log("rmd ok " + metadata.modificationTime); //2014-08-30T13:46:30.000Z
+      // $file.readFileMetadata("backup.json").then(
+      //   function(metadata) {
+      //     console.log("rmd ok " + JSON.stringify(metadata));
+      //     $file.readFileAsText("backup.json").then(
+      //       function(result) {
+      //         console.log("text " + result);
+      //       },
+      //       function(error) {
+      //         console.log("read err " + error.code);
+      //       }
+      //     );
       //   },
       //   function(error) {
       //     console.log("rmd err" + error.code);
       //   }
       // );
 
-      ComicsReader.addNotification("2014-08-30");
+      // $file.writeFile("test.json", "prova prova\nciao\n.").then(
+      //   function(result) {
+      //     console.log("wrt " + result);
+      //   },
+      //   function(error) {
+      //     console.log("wrt err" + error.code);
+      //   }
+      // );
+
+      //ComicsReader.addNotification("2014-08-30");
+
+      // var q = $q.defer();
+      // $timeout(function() { q.resolve(true) }, 2000);
+      // $q.allSettled(q).then(function(res) {console.log(res);});
+      // console.log("sett");
 
     } catch (e) {
       console.log("TEST ERR" + e);
