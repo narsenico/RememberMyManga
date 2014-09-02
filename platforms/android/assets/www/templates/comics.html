@@ -1,4 +1,4 @@
-<ion-view title="{{debugMode ? 'uid: ' + uid : 'Comics'}}">
+<ion-view title="Comics ({{items.length}}/{{filteredComics.length}})">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -15,9 +15,14 @@
       ng-click="clearSearch()">
     </button>
   </ion-header-bar>
-  <ion-content class="has-header" has-bouncing="true">
+  <ion-content class="has-header" has-bouncing="false">
     <ion-list can-swipe="true">
-      <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" ng-repeat="item in filterdComics | orderBy:orderByField:orderByDesc" href="#/app/releases/{{item.id}}">
+      <!-- <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" 
+        ng-repeat="item in items | orderBy:orderByField:orderByDesc" 
+        href="#/app/releases/{{item.id}}"> -->
+        <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" 
+          ng-repeat="item in items" 
+          href="#/app/releases/{{item.id}}">
 
         <div>
           <span class="comics-title"><i class="icon ion-ios7-filing-outline" ng-show="item.reserved=='T'"></i> {{item.name}}</span>
@@ -42,6 +47,12 @@
         </ion-option-button>
       </ion-item>
     </ion-list>
+    <ion-infinite-scroll
+        ng-if="moreDataCanBeLoaded()"
+        icon="ion-loading-c"
+        on-infinite="loadMore()"
+        distance="1%">
+      </ion-infinite-scroll>
   </ion-content>
   <!-- TODO non va bene, footer occupa cmq spazio anche se non visibile -->
   <!-- il problema è la class has-footer di ion-content: tramite direttiva a ion-content si potrebbe gestire la classe (toggle) -->

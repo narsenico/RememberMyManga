@@ -39,7 +39,7 @@ angular.module('starter.controllers', ['starter.services'])
     }
     //aggiorno bestRelease per i comics filtrati
     ComicsReader.refreshBestRelease(arr);
-    $scope.filterdComics = arr;
+    $scope.filteredComics = arr;
   };
 
   $scope.debugMode = Settings.userOptions.debugMode == 'T';
@@ -48,16 +48,42 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.orderByDesc = Settings.userOptions.comicsOrderByDesc == 'T';
   //rendo disponibile l'elenco allo scope
   $scope.comics = ComicsReader.comics;
-  $scope.filterdComics = [];
+  $scope.filteredComics = [];
+  $scope.items = [];
   //
   $scope.$watch('search', function(newValue, oldValue) {
     if (newValue === oldValue) { return; }
     $debounce(applyFilter, 300); //chiamo applyFilter solo se non viene modificato search per 300ms
   });
+  //
+  $scope.$on('stateChangeSuccess', function() {
+    $scope.loadMore();
+  });
   //pulisco filtro
   $scope.clearSearch = function() {
     $scope.search = "";
     applyFilter();
+  };
+  //
+  $scope.loadMore = function() {
+    var data = [];
+    var from = $scope.items.length;
+    var max = Math.min(from + 7, $scope.filteredComics.length);
+    console.log("loadMore " + from + "~" + max);
+    if (from < max) {
+      for (var ii=from; ii<max; ii++) {
+        data.push($scope.filteredComics[ii]);
+      }
+      $scope.items = $scope.items.concat(data);
+    }
+    console.log("end");
+    $scope.$broadcast('scroll.infiniteScrollComplete');
+    $scope.$broadcast('scroll.resize');
+  };
+  //
+  $scope.moreDataCanBeLoaded = function() {
+    console.log("check more");
+    return $scope.items.length < $scope.filteredComics.length;
   };
   //
   $scope.getComicsInfo = function(item) {
@@ -395,10 +421,10 @@ angular.module('starter.controllers', ['starter.services'])
   //DEBUG
   //
   $scope.fakeEntries = function() {
-    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
-    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
-    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
-    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
+    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
+    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
+    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
+    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
     for (var ii=1; ii<=100; ii++)
       ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Comics " + ii, publisher: "Fake" } ) );
     ComicsReader.save();
