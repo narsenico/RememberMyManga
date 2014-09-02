@@ -57,7 +57,7 @@ angular.module('starter.services', [])
 		//
 		read: function(uid, refresh) {
 			//console.log(uid, refresh);
-			if (this.comics == null || refresh) {
+			if (this.comics == null || uid != this.uid || refresh) {
 				var dbkey = uid + "_comics";
 				this.uid = uid;
 				var str = window.localStorage.getItem(dbkey);

@@ -278,6 +278,7 @@ angular.module('starter.controllers', ['starter.services'])
   //
   $scope.version = null;
   $scope.lastBackup = null;
+  $scope.currentUser = ComicsReader.uid;
   //
   if (window.cordova) {
     window.cordova.getAppVersion(function (version) {
@@ -380,6 +381,14 @@ angular.module('starter.controllers', ['starter.services'])
     ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
     ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
     ComicsReader.save();
+  };
+  //
+  $scope.switchUser = function() {
+    if (ComicsReader.uid == "USER")
+      ComicsReader.read("DEBUG");
+    else
+      ComicsReader.read("USER");
+    $scope.currentUser = ComicsReader.uid;
   };
   //
   $scope.test = function($event) {
