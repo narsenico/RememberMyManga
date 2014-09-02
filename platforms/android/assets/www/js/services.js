@@ -57,7 +57,7 @@ angular.module('starter.services', [])
 		//
 		read: function(uid, refresh) {
 			//console.log(uid, refresh);
-			if (this.comics == null || refresh) {
+			if (this.comics == null || uid != this.uid || refresh) {
 				var dbkey = uid + "_comics";
 				this.uid = uid;
 				var str = window.localStorage.getItem(dbkey);
@@ -198,19 +198,19 @@ angular.module('starter.services', [])
 		},
 		//
 		getLastBackup: function() {
-			return $file.readFileMetadata("backup.json");
+			return $file.readFileMetadata(this.uid + "_backup.json");
 		},
 		//
 		backupDataToFile: function() {
 			var dbkey = this.uid + "_comics";
 			var str = window.localStorage.getItem(dbkey);			
-			return $file.writeFile("backup.json", str);
+			return $file.writeFile(this.uid + "_backup.json", str);
 		},
 		//
 		restoreDataFromFile: function() {
 			var $this = this;
 			var q = $q.defer();
-			$file.readFileAsText("backup.json").then(function(result) {
+			$file.readFileAsText(this.uid + "_backup.json").then(function(result) {
 				try {
 					var obj = JSON.parse(result);
 					$this.comics = obj;

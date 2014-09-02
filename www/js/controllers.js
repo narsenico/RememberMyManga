@@ -20,29 +20,44 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, $undoPopup, ComicsReader, Settings) {
+.controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, ComicsReader, Settings) {
+  //filtro i fumetti in base a $scope.search
+  var applyFilter = function() {
+    console.log("applyFilter " + $scope.search);
+    var arr;
+    if (_.isEmpty($scope.search)) {
+      arr = $scope.comics;
+    } else {
+      arr = $scope.comics.filter(function(item) {
+        //tolgo spazi superflui con _.str.clean
+        var bOk = false;
+        if (Settings.userOptions.comicsSearchPublisher == 'T') {
+          bOk = !$scope.search || _.str.include(_.str.clean(item.publisher).toLowerCase(), _.str.clean($scope.search).toLowerCase());   
+        }
+        return bOk || (!$scope.search || _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()));
+      });
+    }
+    //aggiorno bestRelease per i comics filtrati
+    ComicsReader.refreshBestRelease(arr);
+    $scope.filterdComics = arr;
+  };
+
   $scope.debugMode = Settings.userOptions.debugMode == 'T';
+  $scope.uid = ComicsReader.uid;
   $scope.orderByField = Settings.userOptions.comicsOrderBy;
   $scope.orderByDesc = Settings.userOptions.comicsOrderByDesc == 'T';
   //rendo disponibile l'elenco allo scope
   $scope.comics = ComicsReader.comics;
-  //filtro i fumetti in base a $scope.search
-  $scope.getComics = function() {
-    var arr = $scope.comics.filter(function(item) {
-      //tolgo spazi superflui con _.str.clean
-      var bOk = false;
-      if (Settings.userOptions.comicsSearchPublisher == 'T') {
-        bOk = !$scope.search ||  _.str.include(_.str.clean(item.publisher).toLowerCase(), _.str.clean($scope.search).toLowerCase());   
-      }
-      return bOk || (!$scope.search ||  _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()));
-    });
-    //aggiorno bestRelease per i comics filtrati
-    ComicsReader.refreshBestRelease(arr);
-    return arr;
-  };
+  $scope.filterdComics = [];
+  //
+  $scope.$watch('search', function(newValue, oldValue) {
+    if (newValue === oldValue) { return; }
+    $debounce(applyFilter, 300); //chiamo applyFilter solo se non viene modificato search per 300ms
+  });
   //pulisco filtro
   $scope.clearSearch = function() {
     $scope.search = "";
+    applyFilter();
   };
   //
   $scope.getComicsInfo = function(item) {
@@ -91,6 +106,8 @@ angular.module('starter.controllers', ['starter.services'])
     $scope.isMultiSelectionMode = !$scope.isMultiSelectionMode;
     //TODO attiva la multi selezione, tap su item seleziona, pulsanti nel footer (cancella tutti, etc)
   };
+  //
+  applyFilter();
 })
 .directive('bestRelease', function() {
   return {
@@ -277,7 +294,7 @@ angular.module('starter.controllers', ['starter.services'])
   $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, $timeout, $filter, ComicsReader, Settings) {
   //
   $scope.version = null;
-  $scope.lastBackup = null;
+  $scope.lastBackup = 'not found';
   $scope.currentUser = ComicsReader.uid;
   //
   if (window.cordova) {
@@ -335,6 +352,8 @@ angular.module('starter.controllers', ['starter.services'])
     if (window.cordova) {
       ComicsReader.getLastBackup().then(function(result) {
         $scope.lastBackup = $filter('date')(result.modificationTime, 'medium');
+      }, function(error) {
+        $scope.lastBackup = 'not found';
       });
     }
   };
@@ -380,6 +399,8 @@ angular.module('starter.controllers', ['starter.services'])
     ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
     ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
     ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
+    for (var ii=1; ii<=100; ii++)
+      ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Comics " + ii, publisher: "Fake" } ) );
     ComicsReader.save();
   };
   //
@@ -389,6 +410,7 @@ angular.module('starter.controllers', ['starter.services'])
     else
       ComicsReader.read("USER");
     $scope.currentUser = ComicsReader.uid;
+    $scope.readLastBackup();
   };
   //
   $scope.test = function($event) {

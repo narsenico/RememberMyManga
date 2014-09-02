@@ -1,4 +1,4 @@
-<ion-view title="Comics">
+<ion-view title="{{debugMode ? 'uid: ' + uid : 'Comics'}}">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -17,13 +17,13 @@
   </ion-header-bar>
   <ion-content class="has-header" has-bouncing="true">
     <ion-list can-swipe="true">
-      <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" ng-repeat="item in getComics() | orderBy:orderByField:orderByDesc" href="#/app/releases/{{item.id}}">
+      <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" ng-repeat="item in filterdComics | orderBy:orderByField:orderByDesc" href="#/app/releases/{{item.id}}">
 
         <div>
           <span class="comics-title"><i class="icon ion-ios7-filing-outline" ng-show="item.reserved=='T'"></i> {{item.name}}</span>
           <span class="comics-subtitle">{{item.publisher}}</span>
           <span class="comics-notes">{{getComicsInfo(item)}}</span>
-          <span class="comics-notes" ng-show="debugMode">id {{item.id}} last upd {{item.lastUpdate}} best {{item.bestRelease.date}}</span>
+          <span class="comics-notes" ng-if="debugMode">id {{item.id}} last upd {{item.lastUpdate}} best {{item.bestRelease.date}}</span>
         </div>
 
         <best-release comics="item"></best-release>

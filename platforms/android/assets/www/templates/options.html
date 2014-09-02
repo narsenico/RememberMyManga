@@ -10,11 +10,12 @@
 	  		<ion-item class="item" ng-click="repairData()"><i class="icon ion-hammer"></i> Repair data</ion-item>
 	  		<ion-item class="item" ng-click="resetOptions()"><i class="icon ion-ios7-loop-strong"></i> Reset settings</ion-item>
 	  		<ion-item class="item" ng-click="backup()"><i class="icon ion-ios7-download-outline"></i> Backup data</ion-item>
-	  		<ion-item class="item" ng-click="restore()"><i class="icon ion-ios7-upload-outline"></i> Restore data<p>Last backup: {{lastBackup || 'not found'}}</p></ion-item>
+	  		<ion-item class="item" ng-click="restore()"><i class="icon ion-ios7-upload-outline"></i> Restore data<p>Last backup: {{lastBackup}}</p></ion-item>
 	  		<div class="item item-divider" ng-show="userOptions.debugMode=='T'">Test</div>
 	  		<ion-item class="item" ng-click="fakeEntries()" ng-show="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Create fake entries</ion-item>
 	  		<ion-item class="item" ng-click="test($event)" ng-show="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Test {{testresult}}</ion-item>
-			  <div class="item item-divider">Settings</div>
+	  		<ion-item class="item" ng-click="switchUser()" ng-show="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Switch user <p>Current: {{currentUser}}</p></ion-item>
+			<div class="item item-divider">Settings</div>
 			  <ion-item class="item item-toggle">
 					Debug mode
 					<label class="toggle">
