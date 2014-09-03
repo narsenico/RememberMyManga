@@ -1,4 +1,4 @@
-<ion-view title="Comics ({{items.length}}/{{filteredComics.length}})">
+<ion-view title="Comics ({{comics.length}}/{{totComics}})">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -21,7 +21,7 @@
         ng-repeat="item in items | orderBy:orderByField:orderByDesc" 
         href="#/app/releases/{{item.id}}"> -->
         <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" 
-          ng-repeat="item in items" 
+          ng-repeat="item in comics" 
           href="#/app/releases/{{item.id}}">
 
         <div>

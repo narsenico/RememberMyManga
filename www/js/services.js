@@ -20,6 +20,7 @@ var PERIODICITIES = {
 angular.module('starter.services', [])
 
 .factory('ComicsReader', function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification) {
+	console.log("new ComicsReader");
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
 	var lastRemoved = null;
@@ -74,6 +75,11 @@ angular.module('starter.services', [])
 		save: function() {
 			var dbkey = this.uid + "_comics";
 			window.localStorage.setItem(dbkey, JSON.stringify( this.comics ));
+		},
+		//
+		getComics: function(orderBy, desc) {
+			//TODO
+			return this.comics;
 		},
 		//
 		getComicsById: function(id) {
