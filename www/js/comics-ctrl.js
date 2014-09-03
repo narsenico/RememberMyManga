@@ -3,7 +3,7 @@ angular.module('starter.controllers')
 	'$scope', '$ionicModal', '$timeout', '$location', '$undoPopup', '$debounce', 'ComicsReader', 'Settings', 
 function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, ComicsReader, Settings) {
 	//recupero i dati già ordinati
-	var orderedComics = ComicsReader.getComics(Settings.comicsOrderBy, Settings.comicsOrderByDesc);
+	var orderedComics = ComicsReader.getComics(Settings.userOptions.comicsOrderBy || 'name', Settings.userOptions.comicsOrderByDesc == 'T');
 	//conterrà i dati filtrati (tramite campo di ricerca)
 	var filteredComics = orderedComics;
 	//indcia quanti dati caricare alla volta tramite infinite scroll
@@ -15,7 +15,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, Comics
 		if (_.isEmpty($scope.search)) {
 			filteredComics = orderedComics;	
 		} else {
-			filteredComics = $scope.comics.filter(function(item) {
+			filteredComics = orderedComics.filter(function(item) {
 	      var bOk = false;
 	      if (Settings.userOptions.comicsSearchPublisher == 'T') {
 	        bOk = !$scope.search || _.str.include(_.str.clean(item.publisher).toLowerCase(), _.str.clean($scope.search).toLowerCase());   

@@ -21,7 +21,7 @@
         ng-repeat="item in items | orderBy:orderByField:orderByDesc" 
         href="#/app/releases/{{item.id}}"> -->
         <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" 
-          ng-repeat="item in comics" 
+          ng-repeat="item in comics track by item.id" 
           href="#/app/releases/{{item.id}}">
 
         <div>

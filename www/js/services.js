@@ -78,8 +78,24 @@ angular.module('starter.services', [])
 		},
 		//
 		getComics: function(orderBy, desc) {
+			//console.log("getComics", orderBy, desc);
+
+			//TEST
+			orderBy = "name";
+			desc = false;
+
 			//TODO
-			return this.comics;
+			if (orderBy) {
+				var sorted = this.comics.sort(function(a, b) {
+					if (desc)
+						return eval("a." + orderBy).toLowerCase() > eval("b." + orderBy).toLowerCase() ? -1 : 1;
+					else
+						return eval("a." + orderBy).toLowerCase() > eval("b." + orderBy).toLowerCase() ? 1 : -1;
+				});
+				return (this.comics = sorted);
+			} else {
+				return this.comics;
+			}
 		},
 		//
 		getComicsById: function(id) {
